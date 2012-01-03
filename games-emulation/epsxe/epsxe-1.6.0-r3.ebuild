@@ -45,11 +45,11 @@ src_install() {
 }
 
 pkg_postinst() {
-	ewarn "										            "
+	ewarn "                                                 "
 	ewarn "You need at least plugins for sound and video and"
 	ewarn "a BIOS file!										"
-	ewarn "										            "
+	ewarn "                                                 "
 	ewarn "Plugins can also be added to ~/.epsxe/plugins 	"
-	ewarn "manually.								        "
-	ewarn "										            "
+	ewarn "manually.                                        "
+	ewarn "                                                 "
 }
