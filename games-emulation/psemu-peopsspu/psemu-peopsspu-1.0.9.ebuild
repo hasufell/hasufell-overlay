@@ -19,9 +19,7 @@ DEPEND="alsa? ( media-libs/alsa-lib )
 	x86? ( x11-libs/gtk+:1 )
 	amd64? ( app-emulation/emul-linux-x86-soundlibs )"
 RDEPEND="${DEPEND}
-	amd64? ( app-emulation/emul-linux-x86-gtklibs 
-		app-emulation/emul-linux-x86-baselibs 
-		app-emulation/emul-linux-x86-xlibs )"
+	amd64? ( app-emulation/emul-linux-x86-gtklibs )"
 
 S="${WORKDIR}"/src
 
