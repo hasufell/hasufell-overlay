@@ -42,8 +42,8 @@ src_install() {
 	insinto "$(games_get_libdir)"/psemu/cheats
 	doins cheats/* || die
 	dodoc docs/* || die
-	newicon "${DISTDIR}"/${PN}-1-6-0.jpg ${PN}.jpg
-	domenu "${FILESDIR}"/epsxe.desktop
+	newicon "${DISTDIR}"/${PN}-1-6-0.jpg ${PN}.jpg || die
+	domenu "${FILESDIR}"/epsxe.desktop || die
 	prepgamesdirs
 }
 
