@@ -4,11 +4,12 @@
 
 EAPI=3
 
-inherit games
+inherit games fdo-mime
 
 DESCRIPTION="ePSXe PlayStation Emulator"
 HOMEPAGE="http://www.epsxe.com/"
-SRC_URI="http://www.epsxe.com/files/epsxe${PV//.}lin.zip"
+SRC_URI="http://www.epsxe.com/files/epsxe${PV//.}lin.zip
+	http://img.uptodown.net/icons/${PN}-1-6-0.jpg"
 
 LICENSE="freedist"
 SLOT="0"
@@ -24,7 +25,7 @@ RDEPEND="games-emulation/psemu-peopsspu
 	amd64? ( app-emulation/emul-linux-x86-gtklibs )
 	x86? ( x11-libs/gtk+:1 )"
 
-S="${WORKDIR}"
+S=${WORKDIR}
 
 src_install() {
 	local dir="${GAMES_PREFIX_OPT}/${PN}"
@@ -41,10 +42,14 @@ src_install() {
 	insinto "$(games_get_libdir)"/psemu/cheats
 	doins cheats/* || die
 	dodoc docs/* || die
+	newicon "${DISTDIR}"/${PN}-1-6-0.jpg ${PN}.jpg
+	domenu "${FILESDIR}"/epsxe.desktop
 	prepgamesdirs
 }
 
 pkg_postinst() {
+	fdo-mime_desktop_database_update
+	games_pkg_postinst
 	ewarn "                                                 "
 	ewarn "You need at least plugins for sound and video and"
 	ewarn "a BIOS file!                                     "
