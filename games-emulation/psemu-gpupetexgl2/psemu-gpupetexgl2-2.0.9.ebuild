@@ -14,7 +14,7 @@ SRC_URI="http://www.pbernert.com/gpupetexgl${PV//.}.tar.gz
 
 LICENSE="freedist"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 RESTRICT="strip"
 
