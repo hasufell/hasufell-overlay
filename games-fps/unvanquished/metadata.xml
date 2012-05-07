@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>hasufell@gentoo.org</email>
+		<name>Julian Ospald</name>
+	</maintainer>
+	<upstream>
+		<changelog>https://github.com/Unvanquished/Unvanquished/commits/master</changelog>
+		<doc lang="en">http://unvanquished.net/wiki/index.php/Main_Page</doc>
+		<bugs-to>https://github.com/Unvanquished/Unvanquished/issues</bugs-to>
+	</upstream>
+	<longdescription lang="en">
+		Unvanquished is a fast-paced, futuristic FPS with RTS elements, pitting
+		technologically advanced humans against hordes of highly adaptable
+		aliens. The player can choose from either team, providing a fresh
+		gameplay experience on both sides of the conflict.
+	</longdescription>
+	<use>
+		<flag name="cpuinfo">Use CPUInfo (if compilation fails, then disable this)</flag>
+		<flag name="client">Build Daemon client</flag>
+		<flag name="daemonmap">Build Mapping tool</flag>
+		<flag name="glsl">Compile with GLSL Optimizer</flag>
+		<flag name="mumble">Compile with support for Mumble</flag>
+		<flag name="server">Build Daemonded server</flag>
+		<flag name="voip">Compile with VOIP support</flag>
+		<flag name="webp">Compile with WebP loader</flag>
+	</use>
+</pkgmetadata>
