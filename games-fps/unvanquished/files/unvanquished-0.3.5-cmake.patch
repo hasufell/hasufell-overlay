@@ -3,7 +3,7 @@ Date: Sun May  6 22:02:13 UTC 2012
 Subject: build system
 
 unset hardcoded install-destinations
-remove arch suffixes
+remove arch suffixes for binaries to avoid trouble within the ebuild
 respect flags
 
 --- CMakeLists.txt
@@ -172,24 +172,6 @@ respect flags
    )
  endif()
  
-@@ -1161,7 +1046,7 @@
-   # Setup target renderer
-   add_library( renderer SHARED ${RENDERERLIST} ${MOUNT_DIR}/engine/sys/sdl_glimp.c ${MOUNT_DIR}/engine/sys/sdl_gamma.c ${SHAREDLIST} )
-   set_property( TARGET renderer PROPERTY COMPILE_DEFINITIONS BUILD_FREETYPE USE_REFENTITY_ANIMATIONSYSTEM )
--  set_target_properties( renderer PROPERTIES OUTPUT_NAME "rendererGL${BUILD_ARCH}" )
-+  set_target_properties( renderer PROPERTIES OUTPUT_NAME "rendererGL" )
-   target_link_libraries( renderer m )
-   
-   # This section finds and provides REQUIRED dependencies to target renderer
-@@ -1192,7 +1077,7 @@
-   # Setup target rendererGL
-   add_library( rendererGL SHARED ${SHAREDLIST} ${OPENEXRLIST} ${RENDERERGLLIST} ${MOUNT_DIR}/engine/sys/sdl_glimp.c ${MOUNT_DIR}/engine/sys/sdl_gamma.c )
-   set_property( TARGET rendererGL PROPERTY COMPILE_DEFINITIONS BUILD_FREETYPE FT_FREETYPE USE_XREAL_RENDERER USE_REFENTITY_ANIMATIONSYSTEM )
--  set_target_properties( rendererGL PROPERTIES OUTPUT_NAME "rendererGL3${BUILD_ARCH}" )
-+  set_target_properties( rendererGL PROPERTIES OUTPUT_NAME "rendererGL3" )
-   target_link_libraries( rendererGL ${OS_LIBRARIES} )
-   
-   # This section finds and provides REQUIRED dependencies to target rendererGL
 @@ -1255,11 +1140,11 @@
    include_directories( ${MOUNT_DIR}/libs/cpuinfo ${NEWTON_INCLUDES} )
    target_link_libraries( client ${OS_LIBRARIES} ${NEWTON_LIBRARY} )

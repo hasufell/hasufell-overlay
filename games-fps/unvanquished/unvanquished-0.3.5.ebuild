@@ -61,7 +61,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-{cmake,nosuffix}.patch
+	epatch "${FILESDIR}"/${P}-cmake.patch
 
 	# set paths
 	sed \
