@@ -12,12 +12,13 @@ DESCRIPTION="Datafiles and maps for unvanquished"
 HOMEPAGE="http://unvanquished.net/"
 SRC_URI="mirror://sourceforge/${PN%-data}/${MY_PN}_${PV}.zip"
 
-LICENSE=""
+LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND="app-arch/unzip"
+RDEPEND=""
 
 S=${WORKDIR}/${MY_PN}
 
