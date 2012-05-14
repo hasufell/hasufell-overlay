@@ -5,6 +5,7 @@
 EAPI=3
 
 EBZR_REPO_URI="lp:s25rttr"
+#EBZR_FETCH_CMD="bzr branch --no-tree --standalone"
 
 inherit eutils cmake-utils bzr games
 
@@ -41,6 +42,7 @@ src_configure() {
 		| awk '{if ($1 == "date:") {gsub("-", "",$2); print $2}}')
 
 	local mycmakeargs=(
+		-DCMAKE_SKIP_RPATH=YES
 		-DPREFIX="${GAMES_PREFIX}"
 		-DBINDIR="${GAMES_BINDIR}"
 		-DDATADIR="${GAMES_DATADIR}"
