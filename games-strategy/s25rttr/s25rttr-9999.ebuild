@@ -5,7 +5,6 @@
 EAPI=3
 
 EBZR_REPO_URI="lp:s25rttr"
-#EBZR_FETCH_CMD="bzr branch --no-tree --standalone"
 
 inherit eutils cmake-utils bzr games
 
