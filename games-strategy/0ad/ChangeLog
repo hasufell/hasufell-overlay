@@ -2,6 +2,11 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*0ad-11863_alpha10 (15 May 2012)
+
+  15 May 2012; Julian Ospald <hasufell@gentoo.org> +0ad-11863_alpha10.ebuild:
+  version bump
+
   24 Apr 2012; hasufell <julian.ospald@googlemail.com> 0ad-11339_alpha9.ebuild,
   0ad-99999.ebuild:
   fix test phase (was referring to non-existent useflag)
