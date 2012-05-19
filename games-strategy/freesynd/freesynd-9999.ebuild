@@ -36,6 +36,10 @@ src_configure() {
 	cmake-utils_src_configure
 }
 
+src_compile() {
+	cmake-utils_src_compile
+}
+
 src_install() {
 	dogamesbin src/${PN} || die
 	insinto "${GAMES_DATADIR}"/${PN}
