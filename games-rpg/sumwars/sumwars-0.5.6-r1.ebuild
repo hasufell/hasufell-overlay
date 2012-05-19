@@ -42,8 +42,9 @@ S=${WORKDIR}/${PN}-${PV%_*}
 
 pkg_setup() {
 	ewarn "Orge3D currently doesn't work with USE-flag 'threads' under some circumstances."
-	ewarn "If you experience a problem running $P please rebuild dev-games/ogre with USE -threads."
+	ewarn "If you experience a problem running ${P} please rebuild dev-games/ogre with USE -threads."
 	ewarn "See https://bugs.gentoo.org/show_bug.cgi?id=307205#c25"
+	games_pkg_setup
 }
 
 src_prepare() {
@@ -51,7 +52,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use stl && append-flags -DTIXML_USE_STL
+	use stl && append-cppflags -DTIXML_USE_STL
 	use debug && CMAKE_BUILD_TYPE=Debug
 	[ -z "${LINGUAS}" ] && LINGUAS="en"
 
