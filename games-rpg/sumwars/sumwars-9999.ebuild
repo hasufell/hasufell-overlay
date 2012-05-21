@@ -4,7 +4,7 @@
 
 EAPI=3
 
-inherit cmake-utils flag-o-matic eutils mercurial games
+inherit cmake-utils eutils gnome2-utils mercurial games
 
 EHG_REPO_URI="https://bitbucket.org/sumwars/sumwars-code"
 EHG_REVISION="default"
@@ -17,22 +17,23 @@ SRC_URI=""
 LICENSE="GPL-3 CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
 KEYWORDS=""
-IUSE="+stl +tools debug"
+IUSE="+tools debug"
 
 LANGS="de en it pl pt ru uk"
 for L in ${LANGS} ; do
 	IUSE="${IUSE} linguas_${L}"
 done
+unset L
 
 DEPEND="
 	>=dev-games/cegui-0.7.6-r1[ogre]
 	!>=dev-games/cegui-0.8
-	>=dev-games/ogre-1.7.0
+	>=dev-games/ogre-1.7.0[freeimage,opengl,-threads]
 	!>=dev-games/ogre-1.9
 	dev-games/ois
 	dev-games/physfs
-	~dev-lang/lua-5.1.4
-	dev-libs/tinyxml[stl=]
+	=dev-lang/lua-5.1*
+	>=dev-libs/tinyxml-2.6.2-r2
 	media-libs/freealut
 	media-libs/openal
 	media-libs/libogg
@@ -53,14 +54,21 @@ src_unpack() {
 }
 
 src_configure() {
-	use stl && append-cppflags -DTIXML_USE_STL
 	use debug && CMAKE_BUILD_TYPE=Debug
-	[ -z "${LINGUAS}" ] && LINGUAS="en"
+
+	local l langs
+	for l in ${LANGS}; do
+		if use linguas_${l}; then
+			langs="${langs} ${l}"
+		fi
+	done
+
+	[ -z "${langs}" ] && langs="en"
 
 	# configure sumwars with cmake
-	mycmakeargs=(
+	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX=""
-		-DSUMWARS_LANGUAGES="${LINGUAS}"
+		-DSUMWARS_LANGUAGES="${langs}"
 		-DSUMWARS_NO_TINYXML=ON
 		-DSUMWARS_NO_ENET=ON
 		-DSUMWARS_DOC_DIR="/usr/share/doc/${PF}"
@@ -76,9 +84,29 @@ src_configure() {
 	cmake-utils_src_configure
 }
 
+src_compile() {
+	cmake-utils_src_compile
+}
+
 src_install() {
 	cmake-utils_src_install
+	insinto /usr/share/icons/hicolor/128x128/apps
+	newins share/icon/SumWarsIcon_128x128.png ${PN}.png
+	make_desktop_entry ${PN} "Summoning Wars"
+	prepalldocs
 	prepgamesdirs
-	newicon share/icon/SumWars.ico ${PN}.ico
-	make_desktop_entry ${PN} "Summoning Wars" ${PN}.ico
+}
+
+pkg_preinst() {
+	games_pkg_preinst
+	gnome2_icon_savelist
+}
+
+pkg_postinst() {
+	games_pkg_postinst
+	gnome2_icon_cache_update
+}
+
+pkg_postrm() {
+	gnome2_icon_cache_update
 }
