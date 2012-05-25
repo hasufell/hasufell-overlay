@@ -43,7 +43,7 @@ Subject: build system
 -	$(CXX) $(CCFLAGS) -g $(OPT) -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Werror=return-type $(objects) -o game -L. -L/sw/lib -L. -L/usr/lib `sdl-config --libs` -lSDLmain -lSDL -lGL -lGLU -lGLEW -lSDL_image -lSDL_ttf -lSDL_mixer -lpng -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
 +	$(CXX) \
 +		$(LDFLAGS) \
-+		$(CXXFLAGS) $(CPPFLAGS) \
++		$(CXXFLAGS) -fno-inline-functions $(CPPFLAGS) \
 +		$(objects) -o game \
 +		$(LIBS) -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
  
