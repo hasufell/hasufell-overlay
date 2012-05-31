@@ -34,6 +34,10 @@ src_prepare() {
 }
 
 src_configure() {
+	sed \
+		-e '/^TARGET_LINK_LIBRARIES/s#)# dl)#' \
+		-i src/CMakeLists.txt || die "fixing underlinking failed"
+
 	# build system does not set the version for us
 	# will prevent us from connecting to other players
 	local mydate
@@ -56,8 +60,8 @@ src_configure() {
 }
 
 src_compile() {
-	# build system uses some relative paths
-	# CMAKE_IN_SOURCE_BUILD fails/unsupported
+	# build system uses some relative paths,
+	# but CMAKE_IN_SOURCE_BUILD fails/unsupported
 	ln -s "${CMAKE_USE_DIR}"/RTTR "${CMAKE_BUILD_DIR}"/RTTR || die
 
 	cmake-utils_src_compile
