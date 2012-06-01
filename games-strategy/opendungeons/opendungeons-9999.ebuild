@@ -18,8 +18,11 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
+# compile error with ogre-1.8.0
+# https://sourceforge.net/apps/trac/opendungeons/ticket/69
 RDEPEND=">=dev-games/cegui-0.7.0[ogre,opengl]
 	>=dev-games/ogre-1.7.0[cg,freeimage,ois,opengl]
+	!>=dev-games/ogre-1.8.0
 	dev-games/ois
 	dev-libs/libpcre
 	dev-libs/zziplib
