@@ -86,8 +86,8 @@ src_prepare() {
 src_configure() {
 	# theora requires vorbis
 	local mycmakeargs=(
-		-DBINDIR="${GAMES_BINDIR}"
-		-DLIBDIR="$(games_get_libdir)/${PN}"
+		-DCMAKE_INSTALL_BINDIR="${GAMES_BINDIR}"
+		-DCMAKE_INSTALL_LIBDIR="$(games_get_libdir)/${PN}"
 		$(cmake-utils_use debug QVM_DEBUG)
 		$(usex dedicated "-DBUILD_CLIENT=ON" "$(cmake-utils_use_build client CLIENT)")
 		$(cmake-utils_use_build daemonmap DAEMONMAP)
