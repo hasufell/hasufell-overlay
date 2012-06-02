@@ -1,5 +1,5 @@
 From: Julian Ospald <hasufell@gentoo.org>
-Date: Sun May  6 22:02:13 UTC 2012
+Date: Fri Jun  1 22:54:47 UTC 2012
 Subject: build system
 
 unset hardcoded install-destinations
@@ -8,43 +8,30 @@ respect flags
 
 --- CMakeLists.txt
 +++ CMakeLists.txt
-@@ -8,7 +8,6 @@
- cmake_policy( SET CMP0017 NEW )
+@@ -10,9 +10,9 @@
+ endif()
+ 
+ include( CMakeDependentOption )
++include(GNUInstallDirs)
  
  set( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" )
 -set( CMAKE_C_FLAGS "-msse2 -pipe" CACHE STRING "" )
  set( CMAKE_C_FLAGS_DEBUG "-g" CACHE STRING "" )
  set( CMAKE_C_FLAGS_MINSIZEREL "-DNDEBUG -Os" CACHE STRING "" )
  set( CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O3 -ffast-math -fomit-frame-pointer -fno-strict-aliasing" CACHE STRING "" )
-@@ -28,6 +27,10 @@
- set( CMAKE_ASM_COMPILE_OBJECT ${CMAKE_C_COMPILE_OBJECT} )
- set( CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "" ) # Need this to get rid of -rdynamic linker flag set by default by cmake
- 
-+# set paths
-+set( BINDIR bin CACHE PATH "Set binary folder" )
-+set( LIBDIR lib CACHE PATH "Set library folder" )
-+
- # Options
- option( BUILD_CLIENT         "Build Daemon client"                         1 )
- option( BUILD_OLD_RENDERER   "Build old renderer library"                  1 )
-@@ -62,14 +65,6 @@
+@@ -56,9 +56,6 @@
  option( USE_INTERNAL_CRYPTO  "Use internal crypto (nettle)"                0 )
  option( NO_UNTRUSTED_PLUGINS "Don't load native plugins from the user dir" 1 )
  
 -option( ENABLE_W_ALL         "Use -Wall"                                   0 )
 -option( ENABLE_WARNINGS      "Enable various compiler warning options"     1 )
 -option( ENABLE_HARDENING     "Enable various hardening options"            1 )
--if( ENABLE_HARDENING )
--  option( ENABLE_FSTACKPROT  "Enable stack protection if available"        1 )
--  option( ENABLE_RELRO       "Enable relro & bindnow if available"         1 )
--endif()
--
- # Package info
- set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Daemon Unvanquished client" )
- set( CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt" )
-@@ -130,116 +125,6 @@
- endif()
  
+ cmake_dependent_option( BUILD_GAME_GPP       "Build Tremulous GPP game logic"              1 "GAME_LIB OR GAME_QVM" 0 )
+ cmake_dependent_option( QVM_DEBUG            "Enable (some) QVM debugging"                 1 GAME_QVM         0 )
+@@ -172,134 +169,6 @@
+ 
+ include_directories( "${CMAKE_BINARY_DIR}/CMakeFiles" )
  
 -#################
 -# Compile flags #
@@ -79,32 +66,51 @@ respect flags
 -  try_compiler_flag_internal( ${PROP} ${FLAG} CXX cxx C++)
 -endmacro()
 -
+-macro( try_llvm_flag PROP FLAG )
+-  try_compiler_flag_internal( ${PROP} ${FLAG} LLVM cc C/LLVM)
+-endmacro()
+-
+-macro( try_c_llvm_flag PROP FLAG )
+-  try_c_flag( ${PROP} ${FLAG} )
+-  if( GAME_LIB_LLVM )
+-    try_llvm_flag( ${PROP} ${FLAG} )
+-  endif()
+-endmacro()
+-
 -macro( try_c_cxx_flag PROP FLAG )
 -  try_c_flag( ${PROP} ${FLAG} )
 -  try_cxx_flag( ${PROP} ${FLAG} )
 -endmacro()
 -
+-macro( try_c_cxx_llvm_flag PROP FLAG )
+-  try_c_flag( ${PROP} ${FLAG} )
+-  try_cxx_flag( ${PROP} ${FLAG} )
+-  if( GAME_LIB_LLVM )
+-    try_llvm_flag( ${PROP} ${FLAG} )
+-  endif()
+-endmacro()
+-
 -# Various warnings
 -if( ENABLE_W_ALL )
--  try_c_cxx_flag( HAVE_W_ALL              -Wall )
+-  try_c_cxx_llvm_flag( HAVE_W_ALL              -Wall )
 -endif()
 -if( ENABLE_WARNINGS )
--  try_c_cxx_flag( HAVE_W_FORMAT2          -Wformat=2 )
+-  try_c_cxx_llvm_flag( HAVE_W_FORMAT2          -Wformat=2 )
 -  if( NOT HAVE_W_FORMAT2_C )
--    try_c_cxx_flag( HAVE_W_FORMAT         -Wformat )
+-    try_c_cxx_llvm_flag( HAVE_W_FORMAT         -Wformat )
 -  endif()
--  try_c_flag    ( HAVE_W_0LEN_FMT         -Wno-format-zero-length )
--  try_c_cxx_flag( HAVE_W_FORMAT_SECURITY  -Wformat-security )
--  try_c_cxx_flag( HAVE_W_STRICT_ALIAS_2   -Wstrict-aliasing=2 )
--  try_c_cxx_flag( HAVE_W_MISSING_FMT_ATTR -Wmissing-format-attribute )
--  try_c_cxx_flag( HAVE_W_MISSING_NORETURN -Wmissing-noreturn )
--  try_c_flag    ( HAVE_W_IMPLICIT_FN      -Wimplicit-function-declaration )
+-  try_c_llvm_flag    ( HAVE_W_0LEN_FMT         -Wno-format-zero-length )
+-  try_c_cxx_llvm_flag( HAVE_W_FORMAT_SECURITY  -Wformat-security )
+-  try_c_cxx_llvm_flag( HAVE_W_STRICT_ALIAS_2   -Wstrict-aliasing=2 )
+-  try_c_cxx_llvm_flag( HAVE_W_MISSING_FMT_ATTR -Wmissing-format-attribute )
+-  try_c_cxx_llvm_flag( HAVE_W_MISSING_NORETURN -Wmissing-noreturn )
+-  try_c_llvm_flag    ( HAVE_W_IMPLICIT_FN      -Wimplicit-function-declaration )
 -  if( HAVE_W_IMPLICIT_FN_C )
--    try_c_cxx_flag( HAVE_W_ERR_IMPLICIT_FN  -Werror=implicit-function-declaration )
+-    try_c_cxx_llvm_flag( HAVE_W_ERR_IMPLICIT_FN  -Werror=implicit-function-declaration )
 -  endif()
--  try_c_cxx_flag( HAVE_W_FMT_SECURITY     -Wformat-security )
+-  try_c_cxx_llvm_flag( HAVE_W_FMT_SECURITY     -Wformat-security )
 -  if( HAVE_W_FMT_SECURITY_C )
--    try_c_cxx_flag( HAVE_W_ERR_FMT_SECURITY -Werror=format-security )
+-    try_c_cxx_llvm_flag( HAVE_W_ERR_FMT_SECURITY -Werror=format-security )
 -  endif()
 -endif()
 -
@@ -155,24 +161,10 @@ respect flags
 -    try_linker_flag( HAVE_Z_RELRO_Z_NOW -Wl,-z,relro,-z,now )
 -  endif()
 -endif()
--
+ 
  ######################
  # Define Build Files #
- ######################
-@@ -1089,9 +974,9 @@
-   )
- 
-   install( TARGETS game cgame ui
--    RUNTIME DESTINATION bin
--    LIBRARY DESTINATION lib
--    ARCHIVE DESTINATION lib
-+    RUNTIME DESTINATION ${BINDIR}
-+    LIBRARY DESTINATION ${LIBDIR}
-+    ARCHIVE DESTINATION ${LIBDIR}
-   )
- endif()
- 
-@@ -1255,11 +1140,11 @@
+@@ -1266,11 +1135,11 @@
    include_directories( ${MOUNT_DIR}/libs/cpuinfo ${NEWTON_INCLUDES} )
    target_link_libraries( client ${OS_LIBRARIES} ${NEWTON_LIBRARY} )
    set_property( TARGET client APPEND PROPERTY COMPILE_DEFINITIONS USE_XREAL_RENDERER COMPAT_ET USE_REFENTITY_ANIMATIONSYSTEM USE_CRYPTO  )
@@ -182,13 +174,13 @@ respect flags
 -    RUNTIME DESTINATION bin
 -    LIBRARY DESTINATION lib
 -    ARCHIVE DESTINATION lib
-+    RUNTIME DESTINATION ${BINDIR}
-+    LIBRARY DESTINATION ${LIBDIR}
-+    ARCHIVE DESTINATION ${LIBDIR}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
    )
  
    # Mac OS X specific settings
-@@ -1403,11 +1288,11 @@
+@@ -1416,11 +1285,11 @@
    include_directories( ${MOUNT_DIR}/libs/cpuinfo ${NEWTON_INCLUDES} )
    target_link_libraries( server ${OS_LIBRARIES} ${NEWTON_LIBRARY} )
    set_property( TARGET server APPEND PROPERTY COMPILE_DEFINITIONS DEDICATED COMPAT_ET USE_CRYPTO )
@@ -198,13 +190,13 @@ respect flags
 -    RUNTIME DESTINATION bin
 -    LIBRARY DESTINATION lib
 -    ARCHIVE DESTINATION lib
-+    RUNTIME DESTINATION ${BINDIR}
-+    LIBRARY DESTINATION ${LIBDIR}
-+    ARCHIVE DESTINATION ${LIBDIR}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
    )
  
    # Mac OS X has some trouble with PIC code under X86/32.
-@@ -1473,11 +1358,11 @@
+@@ -1487,11 +1356,11 @@
    include_directories( ${LIB_DIR}/picomodel ${MOUNT_DIR}/tools/common )
    target_link_libraries( daemonMap ${OS_LIBRARIES} )
    set_property( TARGET daemonMap APPEND PROPERTY COMPILE_DEFINITIONS USE_OPENGL )
@@ -214,9 +206,9 @@ respect flags
 -    RUNTIME DESTINATION bin
 -    LIBRARY DESTINATION lib
 -    ARCHIVE DESTINATION lib
-+    RUNTIME DESTINATION ${BINDIR}
-+    LIBRARY DESTINATION ${LIBDIR}
-+    ARCHIVE DESTINATION ${LIBDIR}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
    )
    # This section finds and provides REQUIRED dependencies to DaemonMap target
    find_package( OpenGL REQUIRED )

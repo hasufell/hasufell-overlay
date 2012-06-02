@@ -4,19 +4,19 @@
 
 EAPI=3
 
-inherit cmake-utils eutils games
+inherit cmake-utils eutils user games vcs-snapshot
 
 MY_PN="Unvanquished"
 
 DESCRIPTION="Daemon engine, a fork of OpenWolf which powers the game Unvanquished"
 HOMEPAGE="http://unvanquished.net/"
-SRC_URI="https://github.com/${MY_PN}/${MY_PN}/tarball/v0.3.5
+SRC_URI="https://github.com/${MY_PN}/${MY_PN}/tarball/v${PV}
 	-> ${P}.tar.gz"
 
 LICENSE="GPL-3 CCPL-Attribution-ShareAlike-2.5 CCPL-Attribution-ShareAlike-3.0 as-is"
 SLOT="0"
-KEYWORDS="~amd64"
-IUSE="+cpuinfo +client daemonmap +glsl mumble ncurses mysql openal +server theora +voip vorbis +webp xvid"
+KEYWORDS="~amd64 ~x86"
+IUSE="+cpuinfo +client daemonmap debug +glsl mumble ncurses mysql openal +server theora +voip vorbis +webp xvid"
 
 RDEPEND="
 	dev-libs/nettle[gmp]
@@ -46,29 +46,40 @@ RDEPEND="
 	xvid? ( media-libs/xvid )
 	"
 DEPEND="${RDEPEND}
-	app-arch/unzip
 	virtual/pkgconfig"
 
-S=${WORKDIR}/${MY_PN}-${MY_PN}-9fdb3c0
-
-CMAKE_VERBOSE=1
 CMAKE_IN_SOURCE_BUILD=1
 
-src_unpack() {
-	unpack ${A}
+UNV_SERVER_HOME=${GAMES_STATEDIR}/${PN}-server
+UNV_SERVER_DATA=${UNV_SERVER_HOME}/.Unvanquished/main
 
-	cp "${FILESDIR}"/${PN}{,-server}.sh "${T}"/ || die
+pkg_setup() {
+	games_pkg_setup
+
+	if use server ; then
+		enewuser \
+			"${PN}-server" \
+			"-1" \
+			"/bin/sh" \
+			"${UNV_SERVER_HOME}" \
+			"games"
+	fi
 }
 
 src_prepare() {
 	epatch "${FILESDIR}"/${P}-cmake.patch
 
 	# set paths
-	sed \
-		-e "s#@GAMES_LIBDIR@#$(games_get_libdir)#g" \
-		-e "s#@GAMES_BINDIR@#${GAMES_BINDIR}#g" \
-		-e "s#@GAMES_STATEDIR@#${GAMES_STATEDIR}#g" \
-		-i "${T}"/${PN}{,-server}.sh || die
+	for i in ${PN}-server.{confd,initd,sh} ${PN}.sh ; do
+		sed \
+			-e "s#@GAMES_LIBDIR@#$(games_get_libdir)#g" \
+			-e "s#@GAMES_BINDIR@#${GAMES_BINDIR}#g" \
+			-e "s#@GAMES_DATADIR@#${GAMES_DATADIR}#g" \
+			-e "s#@GAMES_STATEDIR@#${GAMES_STATEDIR}#g" \
+			-e "s#@GAMES_SYSCONFDIR@#${GAMES_SYSCONFDIR}#g" \
+			-e "s#@UNV_SERVER_DATA@#${UNV_SERVER_DATA}#g" \
+			"${FILESDIR}"/${i} > "${T}"/${i} || die
+	done
 }
 
 src_configure() {
@@ -76,9 +87,10 @@ src_configure() {
 	local mycmakeargs=(
 		-DBINDIR="${GAMES_BINDIR}"
 		-DLIBDIR="$(games_get_libdir)/${PN}"
-		$(cmake-utils_use_build client CLIENT)
+		$(cmake-utils_use debug QVM_DEBUG)
+		$(usex dedicated "-DBUILD_CLIENT=ON" "$(cmake-utils_use_build client CLIENT)")
 		$(cmake-utils_use_build daemonmap DAEMONMAP)
-		$(cmake-utils_use_build server SERVER)
+		$(usex dedicated "-DBUILD_SERVER=ON" "$(cmake-utils_use_build server SERVER)")
 		$(cmake-utils_use_use cpuinfo CPUINFIO)
 		$(cmake-utils_use_use glsl GLSL_OPTIMIZER)
 		$(cmake-utils_use_use mumble MUMBLE)
@@ -100,28 +112,28 @@ src_compile() {
 }
 
 src_install() {
-	# bin
-	newgamesbin daemon ${PN}client || die
 	if use server ; then
+		insinto "${GAMES_SYSCONFDIR}"/${PN}
+		doins "${FILESDIR}"/config/{maprotation,server}.cfg || die
+
+		newinitd "${T}"/${PN}-server.initd ${PN}-server
+		newconfd "${T}"/${PN}-server.confd ${PN}-server
+
 		newgamesbin daemonded ${PN}ded || die
+		newgamesbin "${T}"/${PN}-server.sh ${PN}-server || die
 	fi
+
+	newgamesbin daemon ${PN}client || die
+	newgamesbin "${T}"/${PN}.sh ${PN} || die
+
 	if use daemonmap ; then
 		newgamesbin daemonmap ${PN}map || die
 	fi
 
-	# lib
 	exeinto "$(games_get_libdir)"/${PN}
 	doexe *.so || die
 	exeinto "$(games_get_libdir)"/${PN}/main
 	doexe main/*.so || die
-
-	# conf
-	insinto "${GAMES_DATADIR}"/${PN}
-	doins "${FILESDIR}"/config/{maprotation,server}.cfg.example || die
-
-	# wrappers
-	newgamesbin "${T}"/unvanquished.sh ${PN}
-	newgamesbin "${T}"/unvanquished-server.sh ${PN}-server
 
 	# other
 	doicon debian/${PN}.png
@@ -134,15 +146,14 @@ pkg_postinst() {
 	games_pkg_postinst
 
 	if use server ; then
-		elog
-		elog "To configure your dedicated server, you need to copy the files"
-		elog "${GAMES_DATADIR}/${PN}/server.cfg.example"
-		elog "${GAMES_DATADIR}/${PN}/maprotation.cfg.example"
-		elog "into ~/.Unvanquished/main (better create a seperate user)"
-		elog
-		elog "To run your dedicated server issue:"
-		elog "unvanquished-server +set net_ip \$NET_IP +set dedicated 2"
-		elog "\$NET_IP can be 'localhost' or the DNS/IP of your internet interface"
-		elog "'+set dedicated 2' will advertise your server on the public list"
+		elog "To configure your dedicated server, edit the files:"
+		elog "${GAMES_SYSCONFDIR}/${PN}/server.cfg"
+		elog "${GAMES_SYSCONFDIR}/${PN}/maprotation.cfg"
+		elog "/etc/conf.d/${PN}-server"
+		elog ""
+		elog "To run your dedicated server use the initscript"
+		elog "/etc/init.d/${PN}-server which is run"
+		elog "as user '${PN}-server'."
+		elog "The homedir is '${UNV_SERVER_HOME}'."
 	fi
 }

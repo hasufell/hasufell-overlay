@@ -10,21 +10,20 @@ MY_PN="Unvanquished"
 
 DESCRIPTION="Datafiles and maps for unvanquished"
 HOMEPAGE="http://unvanquished.net/"
-SRC_URI="mirror://sourceforge/${PN%-data}/${MY_PN}_${PV}.zip"
+SRC_URI="mirror://sourceforge/${PN%-data}/${MY_PN}-${PV}.zip"
 
-LICENSE="as-is"
+LICENSE=""
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="app-arch/unzip"
-RDEPEND=""
 
 S=${WORKDIR}/${MY_PN}
 
 src_install() {
-	keepdir "${GAMES_STATEDIR}"/${PN%-data}/main
-	insinto "${GAMES_STATEDIR}"/${PN%-data}/main
+	keepdir "${GAMES_DATADIR}"/${PN%-data}/main
+	insinto "${GAMES_DATADIR}"/${PN%-data}/main
 	doins main/*.pk3 || die
 
 	prepgamesdirs
