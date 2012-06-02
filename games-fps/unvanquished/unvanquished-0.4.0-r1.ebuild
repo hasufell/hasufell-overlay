@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 inherit cmake-utils eutils user games vcs-snapshot
 
@@ -48,6 +48,8 @@ RDEPEND="
 	"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
+
+REQUIRED_USE="theora? ( vorbis )"
 
 CMAKE_IN_SOURCE_BUILD=1
 
@@ -100,7 +102,7 @@ src_configure() {
 		$(cmake-utils_use_use openal OPENAL)
 		$(cmake-utils_use_use voip VOIP)
 		$(cmake-utils_use_use vorbis CODEC_VORBIS)
-		$(usex vorbis "$(cmake-utils_use_use theora CIN_THEORA)" "")
+		$(cmake-utils_use_use theora CIN_THEORA)
 		$(cmake-utils_use_use webp WEBP)
 		$(cmake-utils_use_use xvid CIN_XVID)
 	)
@@ -115,26 +117,26 @@ src_compile() {
 src_install() {
 	if use server ; then
 		insinto "${GAMES_SYSCONFDIR}"/${PN}
-		doins "${FILESDIR}"/config/{maprotation,server}.cfg || die
+		doins "${FILESDIR}"/config/{maprotation,server}.cfg
 
 		newinitd "${T}"/${PN}-server.initd ${PN}-server
 		newconfd "${T}"/${PN}-server.confd ${PN}-server
 
-		newgamesbin daemonded ${PN}ded || die
-		newgamesbin "${T}"/${PN}-server.sh ${PN}-server || die
+		newgamesbin daemonded ${PN}ded
+		newgamesbin "${T}"/${PN}-server.sh ${PN}-server
 	fi
 
-	newgamesbin daemon ${PN}client || die
-	newgamesbin "${T}"/${PN}.sh ${PN} || die
+	newgamesbin daemon ${PN}client
+	newgamesbin "${T}"/${PN}.sh ${PN}
 
 	if use daemonmap ; then
-		newgamesbin daemonmap ${PN}map || die
+		newgamesbin daemonmap ${PN}map
 	fi
 
 	exeinto "$(games_get_libdir)"/${PN}
-	doexe *.so || die
+	doexe *.so
 	exeinto "$(games_get_libdir)"/${PN}/main
-	doexe main/*.so || die
+	doexe main/*.so
 
 	# other
 	doicon debian/${PN}.png
