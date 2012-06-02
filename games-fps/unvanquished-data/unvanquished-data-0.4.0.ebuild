@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 inherit games
 
@@ -19,12 +19,11 @@ IUSE=""
 
 DEPEND="app-arch/unzip"
 
-S=${WORKDIR}/${MY_PN}
+S=${WORKDIR}
 
 src_install() {
-	keepdir "${GAMES_DATADIR}"/${PN%-data}/main
 	insinto "${GAMES_DATADIR}"/${PN%-data}/main
-	doins main/*.pk3 || die
+	doins main/*.pk3
 
 	prepgamesdirs
 }
