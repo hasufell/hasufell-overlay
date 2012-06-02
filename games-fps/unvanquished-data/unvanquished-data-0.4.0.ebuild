@@ -19,7 +19,7 @@ IUSE=""
 
 DEPEND="app-arch/unzip"
 
-S=${WORKDIR}
+S=${WORKDIR}/Unvanquished
 
 src_install() {
 	insinto "${GAMES_DATADIR}"/${PN%-data}/main
