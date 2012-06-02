@@ -37,6 +37,7 @@ RDEPEND="
 	mysql? ( virtual/mysql )
 	ncurses? ( sys-libs/ncurses )
 	openal? ( media-libs/openal )
+	server? ( app-misc/screen )
 	voip? ( media-libs/speex )
 	vorbis? (
 		media-libs/libvorbis
@@ -153,7 +154,7 @@ pkg_postinst() {
 		elog ""
 		elog "To run your dedicated server use the initscript"
 		elog "/etc/init.d/${PN}-server which is run"
-		elog "as user '${PN}-server'."
+		elog "as user '${PN}-server' in a screen session."
 		elog "The homedir is '${UNV_SERVER_HOME}'."
 	fi
 }

@@ -30,7 +30,8 @@ start() {
 		--user unvanquished-server \
 		--env HOME="${HOMEDIR}" \
 		--group games \
-		--exec /usr/bin/screen -- -D -m -S unvanquished-server "$DAEMON $DAEMON_OPTS"
+		--name unvanquished-server \
+		--exec /usr/bin/screen -- -D -m -S unvanquished-server $DAEMON $DAEMON_OPTS
 
 	eend $?
 }
@@ -39,11 +40,9 @@ stop() {
 	ebegin "Stopping Unvanquished dedicated server"
 	start-stop-daemon \
 	--stop \
+	--signal 15 \
 	--quiet \
-	--pidfile $PIDFILE \
-	--exec $DAEMON
-
-	rm -f $PIDFILE
+	--pidfile $PIDFILE
 
 	eend $?
 }
