@@ -45,6 +45,7 @@ RDEPEND="
 		virtual/opengl
 		x11-libs/libX11
 		mysql? ( virtual/mysql )
+		ncurses? ( sys-libs/ncurses )
 		openal? ( media-libs/openal )
 		server? ( app-misc/screen )
 		xvid? ( media-libs/xvid )
@@ -52,12 +53,14 @@ RDEPEND="
 			media-libs/libvorbis
 			theora? ( media-libs/libtheora )
 			)
-	webp? ( media-libs/libwebp )
+		webp? ( media-libs/libwebp )
+		voip? ( media-libs/speex )
 	)
-	dedicated? ( app-misc/screen )
-	ncurses? ( sys-libs/ncurses )
-	voip? ( media-libs/speex )
-	"
+	dedicated? (
+		app-misc/screen
+		ncurses? ( sys-libs/ncurses )
+		voip? ( media-libs/speex )
+	)"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
