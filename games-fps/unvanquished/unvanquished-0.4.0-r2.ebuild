@@ -26,6 +26,14 @@ RDEPEND="
 	net-misc/curl
 	sys-libs/glibc
 	sys-libs/zlib
+	daemonmap? (
+		media-libs/libpng:0
+		media-libs/libsdl
+		virtual/glu
+		virtual/jpeg
+		virtual/opengl
+		x11-libs/libX11
+	)
 	!dedicated? (
 		media-libs/freetype:2
 		media-libs/glew
@@ -40,7 +48,6 @@ RDEPEND="
 		openal? ( media-libs/openal )
 		server? ( app-misc/screen )
 		xvid? ( media-libs/xvid )
-
 		vorbis? (
 			media-libs/libvorbis
 			theora? ( media-libs/libtheora )
@@ -131,7 +138,7 @@ src_install() {
 		newgamesbin "${T}"/${PN}-server.sh ${PN}-server
 	fi
 
-	if ! use dedicated ; then
+	if ! use dedicated && use client ; then
 		newgamesbin daemon ${PN}client
 		newgamesbin "${T}"/${PN}.sh ${PN}
 
