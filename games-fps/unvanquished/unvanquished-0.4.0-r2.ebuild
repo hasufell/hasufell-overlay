@@ -28,7 +28,6 @@ RDEPEND="
 	sys-libs/zlib
 	daemonmap? (
 		media-libs/libpng:0
-		media-libs/libsdl
 		virtual/glu
 		virtual/jpeg
 		virtual/opengl
