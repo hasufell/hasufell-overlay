@@ -164,6 +164,33 @@ respect flags
  
  ######################
  # Define Build Files #
+@@ -1151,7 +1020,7 @@
+ # Build Old Renderer #
+ ######################
+ 
+-if( BUILD_OLD_RENDERER )
++if( BUILD_OLD_RENDERER AND BUILD_CLIENT )
+   # Setup target renderer
+   add_library( renderer SHARED ${RENDERERLIST} ${MOUNT_DIR}/engine/sys/sdl_glimp.c ${MOUNT_DIR}/engine/sys/sdl_gamma.c ${SHAREDLIST} )
+   set_property( TARGET renderer PROPERTY COMPILE_DEFINITIONS BUILD_FREETYPE USE_REFENTITY_ANIMATIONSYSTEM )
+@@ -1182,7 +1051,7 @@
+ # Build New Renderer #
+ ######################
+ 
+-if( BUILD_NEW_RENDERER )
++if( BUILD_NEW_RENDERER AND BUILD_CLIENT )
+   # Setup target rendererGL
+   add_library( rendererGL SHARED ${SHAREDLIST} ${OPENEXRLIST} ${RENDERERGLLIST} ${MOUNT_DIR}/engine/sys/sdl_glimp.c ${MOUNT_DIR}/engine/sys/sdl_gamma.c )
+   set_property( TARGET rendererGL PROPERTY COMPILE_DEFINITIONS BUILD_FREETYPE FT_FREETYPE USE_XREAL_RENDERER USE_REFENTITY_ANIMATIONSYSTEM )
+@@ -1219,7 +1088,7 @@
+ # Build GLSL Optimizer #
+ ########################
+ 
+-if( USE_GLSL_OPTIMIZER )
++if( USE_GLSL_OPTIMIZER AND BUILD_CLIENT )
+   include_directories( ${LIB_DIR}/glsl-optimizer/include )
+   include_directories( ${LIB_DIR}/glsl-optimizer/src/mesa )
+   include_directories( ${LIB_DIR}/glsl-optimizer/src/mapi )
 @@ -1266,11 +1135,11 @@
    include_directories( ${MOUNT_DIR}/libs/cpuinfo ${NEWTON_INCLUDES} )
    target_link_libraries( client ${OS_LIBRARIES} ${NEWTON_LIBRARY} )
@@ -180,6 +207,15 @@ respect flags
    )
  
    # Mac OS X specific settings
+@@ -1386,7 +1255,7 @@
+ # Build OpenAL #
+ ################
+ 
+-if( USE_OPENAL )
++if( USE_OPENAL AND BUILD_CLIENT )
+   find_package( OpenAL REQUIRED )
+   add_library( al SHARED ${ALLIST} )
+   include_directories( ${OPENAL_INCLUDE_DIRS} )
 @@ -1416,11 +1285,11 @@
    include_directories( ${MOUNT_DIR}/libs/cpuinfo ${NEWTON_INCLUDES} )
    target_link_libraries( server ${OS_LIBRARIES} ${NEWTON_LIBRARY} )
