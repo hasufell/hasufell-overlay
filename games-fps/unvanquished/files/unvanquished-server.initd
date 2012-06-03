@@ -15,7 +15,7 @@ depend() {
 
 start() {
 	if [ "$START_DAEMON" != 1 ]; then
-		eerror "(not starting - disabled in /etc/default/unvanquished-server)"
+		eerror "(not starting - disabled in /etc/conf.d/unvanquished-server)"
 		return 1
 	fi
 
