@@ -16,7 +16,7 @@ SRC_URI="https://github.com/${MY_PN}/${MY_PN}/tarball/v${PV}
 LICENSE="GPL-3 CCPL-Attribution-ShareAlike-2.5 CCPL-Attribution-ShareAlike-3.0 as-is"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+cpuinfo +client daemonmap debug dedicated +glsl mumble ncurses mysql openal +server theora +voip vorbis +webp xvid"
+IUSE="+cpuinfo daemonmap debug dedicated +glsl mumble ncurses mysql openal +server theora +voip vorbis +webp xvid"
 
 RDEPEND="
 	dev-libs/nettle[gmp]
@@ -109,7 +109,7 @@ src_configure() {
 		-DCMAKE_INSTALL_BINDIR="${GAMES_BINDIR}"
 		-DCMAKE_INSTALL_LIBDIR="$(games_get_libdir)/${PN}"
 		$(cmake-utils_use debug QVM_DEBUG)
-		$(usex dedicated "-DBUILD_CLIENT=OFF" "$(cmake-utils_use_build client CLIENT)")
+		$(usex dedicated "-DBUILD_CLIENT=OFF" "-DBUILD_CLIENT=ON")
 		$(cmake-utils_use_build daemonmap DAEMONMAP)
 		$(usex dedicated "-DBUILD_SERVER=ON" "$(cmake-utils_use_build server SERVER)")
 		$(cmake-utils_use_use cpuinfo CPUINFIO)
@@ -144,7 +144,7 @@ src_install() {
 		newgamesbin "${T}"/${PN}-server.sh ${PN}-server
 	fi
 
-	if ! use dedicated && use client ; then
+	if ! use dedicated ; then
 		newgamesbin daemon ${PN}client
 		newgamesbin "${T}"/${PN}.sh ${PN}
 
