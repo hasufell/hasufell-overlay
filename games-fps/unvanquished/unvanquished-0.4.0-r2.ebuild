@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit cmake-utils eutils user games vcs-snapshot
+inherit cmake-utils eutils flag-o-matic user games vcs-snapshot
 
 MY_PN="Unvanquished"
 
@@ -101,6 +101,9 @@ src_prepare() {
 }
 
 src_configure() {
+	# QA
+	append-cflags "-fno-strict-aliasing"
+
 	# theora requires vorbis
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_BINDIR="${GAMES_BINDIR}"
