@@ -32,7 +32,8 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-build.patch
+	epatch "${FILESDIR}"/${P}-build.patch \
+		"${FILESDIR}"/${P}-underlinking.patch
 }
 
 src_install() {
