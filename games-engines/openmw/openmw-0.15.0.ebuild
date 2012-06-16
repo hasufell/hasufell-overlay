@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit flag-o-matic gnome2-utils cmake-utils games
+inherit eutils flag-o-matic gnome2-utils cmake-utils games
 
 DESCRIPTION="An open source reimplementation of TES III: Morrowind"
 HOMEPAGE="http://openmw.org/"
