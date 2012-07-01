@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  01 Jul 2012; Julian Ospald <hasufell@gentoo.org> ChangeLog:
+  revision bump: bump to EAPI=4, respect flags, restructure build process to
+  avoid using update-workspaces.sh, fix test phase
+
 *0ad-11863_alpha10 (15 May 2012)
 
   15 May 2012; Julian Ospald <hasufell@gentoo.org> +0ad-11863_alpha10.ebuild:
