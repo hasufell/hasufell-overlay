@@ -1,0 +1,272 @@
+From: Julian Ospald <hasufell@gentoo.org>
+Date: Sun Jun 24 18:32:38 UTC 2012
+Subject: build system
+
+respect flags for 0ad
+http://trac.wildfiregames.com/ticket/1516
+
+repsect flags for 3rd party FCOLLADA
+and filter optimizations that break compilation/linking
+http://trac.wildfiregames.com/ticket/1516
+
+don't add CFLAGS to CXX calls
+http://trac.wildfiregames.com/changeset/12025
+
+--- build/premake/premake4.lua
++++ build/premake/premake4.lua
+@@ -134,17 +134,16 @@
+ 
+ function project_set_build_flags()
+ 
+-	flags { "Symbols", "NoEditAndContinue" }
++	flags { "NoEditAndContinue" }
+ 	if not _OPTIONS["icc"] then
+ 		-- adds the -Wall compiler flag
+-		flags { "ExtraWarnings" } -- this causes far too many warnings/remarks on ICC
++		flags { } -- this causes far too many warnings/remarks on ICC
+ 	end
+ 
+ 	configuration "Debug"
+ 		defines { "DEBUG" }
+ 
+ 	configuration "Release"
+-		flags { "OptimizeSpeed" }
+ 		defines { "NDEBUG", "CONFIG_FINAL=1" }
+ 
+ 	configuration { }
+@@ -177,18 +176,7 @@
+ 
+ 	else	-- *nix
+ 		if _OPTIONS["icc"] then
+-			buildoptions {
+-				"-w1",
+-				-- "-Wabi",
+-				-- "-Wp64", -- complains about OBJECT_TO_JSVAL which is annoying
+-				"-Wpointer-arith",
+-				"-Wreturn-type",
+-				-- "-Wshadow",
+-				"-Wuninitialized",
+-				"-Wunknown-pragmas",
+-				"-Wunused-function",
+-				"-wd1292" -- avoid lots of 'attribute "__nonnull__" ignored'
+-			}
++			buildoptions { }
+ 			configuration "Debug"
+ 				buildoptions { "-O0" } -- ICC defaults to -O2
+ 			configuration { }
+@@ -197,45 +185,10 @@
+ 			end
+ 		else
+ 			buildoptions {
+-				-- enable most of the standard warnings
+-				"-Wno-switch",		-- enumeration value not handled in switch (this is sometimes useful, but results in lots of noise)
+-				"-Wno-reorder",		-- order of initialization list in constructors (lots of noise)
+-				"-Wno-invalid-offsetof",	-- offsetof on non-POD types (see comment in renderer/PatchRData.cpp)
+-
+-				"-Wextra",
+-				"-Wno-missing-field-initializers",	-- (this is common in external headers we can't fix)
+-
+-				-- add some other useful warnings that need to be enabled explicitly
+-				"-Wunused-parameter",
+-				"-Wredundant-decls",	-- (useful for finding some multiply-included header files)
+-				-- "-Wformat=2",		-- (useful sometimes, but a bit noisy, so skip it by default)
+-				-- "-Wcast-qual",		-- (useful for checking const-correctness, but a bit noisy, so skip it by default)
+-				"-Wnon-virtual-dtor",	-- (sometimes noisy but finds real bugs)
+-				"-Wundef",				-- (useful for finding macro name typos)
+-
+ 				-- enable security features (stack checking etc) that shouldn't have
+ 				-- a significant effect on performance and can catch bugs
+-				"-fstack-protector-all",
+ 				"-D_FORTIFY_SOURCE=2",
+-
+-				-- always enable strict aliasing (useful in debug builds because of the warnings)
+-				"-fstrict-aliasing",
+-
+-				-- do something (?) so that ccache can handle compilation with PCH enabled
+-				"-fpch-preprocess",
+-
+-				-- don't omit frame pointers (for now), because performance will be impacted
+-				-- negatively by the way this breaks profilers more than it will be impacted
+-				-- positively by the optimisation
+-				"-fno-omit-frame-pointer"
+ 			}
+-
+-			if arch == "x86" or arch == "amd64" then
+-				buildoptions {
+-					-- enable SSE intrinsics
+-					"-msse"
+-				}
+-			end
+ 
+ 			if arch == "arm" then
+ 				-- disable warnings about va_list ABI change
+@@ -246,18 +199,12 @@
+ 			end
+ 
+ 			if os.is("linux") or os.is("bsd") then
+-				linkoptions { "-Wl,--no-undefined", "-Wl,--as-needed" }
++				linkoptions { "-Wl,--no-undefined" }
+ 			end
+ 
+ 			if _OPTIONS["coverage"] then
+ 				buildoptions { "-fprofile-arcs", "-ftest-coverage" }
+ 				links { "gcov" }
+-			end
+-
+-			-- To support intrinsics like __sync_bool_compare_and_swap on x86
+-			-- we need to set -march to something that supports them
+-			if arch == "x86" then
+-				buildoptions { "-march=i686" }
+ 			end
+ 
+ 			-- We don't want to require SSE2 everywhere yet, but OS X headers do
+@@ -268,9 +215,7 @@
+ 		end
+ 
+ 		buildoptions {
+-			-- Hide symbols in dynamic shared objects by default, for efficiency and for equivalence with
+-			-- Windows - they should be exported explicitly with __attribute__ ((visibility ("default")))
+-			"-fvisibility=hidden"
++
+ 		}
+ 
+ 		-- X11 includes may be installed in one of a gadzillion of three places
+--- libraries/fcollada/src/Makefile
++++ libraries/fcollada/src/Makefile
+@@ -8,18 +8,19 @@
+ endif
+ 
+ CXX ?= g++
+-CXXFLAGS += -fvisibility=hidden -W -Wall -Wno-unused-parameter -Wno-unused-function $(OS_DEFINE) $(PIC_FLAGS) $(CPPFLAGS)
+-CXXFLAGS_DEBUG := -O0 -g -D_DEBUG -DRETAIL
+-CXXFLAGS_RELEASE := -O1 -DNDEBUG -DRETAIL
+-# (-O2 with gcc 4.3 causes linker errors when using this library, for unknown reasons, so stick with -O1)
+-CXXFLAGS_TEST := -O0 -g -D_DEBUG
++CXXFLAGS += $(OS_DEFINE) $(PIC_FLAGS) $(CPPFLAGS)
++CXXFLAGS_DEBUG := -g -D_DEBUG -DRETAIL
++CXXFLAGS_RELEASE := -DNDEBUG -DRETAIL
++CXXFLAGS_TEST := -g -D_DEBUG
+ LIBS += `pkg-config libxml-2.0 --libs`
+ INCLUDES += -IFCollada `pkg-config libxml-2.0 --cflags`
+ INCLUDES_TEST := -IFCollada/FColladaTest $(INCLUDES)
+ 
+ # FCollada is not aliasing-safe, so disallow dangerous optimisations
+ # (TODO: It'd be nice to fix FCollada, but that looks hard)
+-CXXFLAGS += -fno-strict-aliasing
++# disallow optimizations which are causing
++# linker errors when using this library
++CXXFLAGS += -fno-strict-aliasing -fno-inline-small-functions -fno-ipa-cp -fno-ipa-sra
+ 
+ SOURCE = \
+ 	FCollada/FCollada.cpp \
+--- build/premake/premake4/src/tools/gcc.lua
++++ build/premake/premake4/src/tools/gcc.lua
+@@ -106,6 +106,9 @@
+ 	
+ 	function premake.gcc.getcxxflags(cfg)
+ 		local result = table.translate(cfg.flags, cxxflags)
++		if cfg.system ~= "windows" and cfg.kind == "SharedLib" then
++			table.insert(result, "-fPIC")
++		end
+ 		return result
+ 	end
+ 	
+@@ -122,8 +125,6 @@
+ 		if not cfg.flags.Symbols then
+ 			if cfg.system == "macosx" then
+ 				table.insert(result, "-Wl,-x")
+-			else
+-				table.insert(result, "-s")
+ 			end
+ 		end
+ 	
+--- build/premake/premake4/src/actions/make/make_cpp.lua
++++ build/premake/premake4/src/actions/make/make_cpp.lua
+@@ -107,7 +107,7 @@
+ 
+ 		-- precompiler header rule
+ 		_.pchrules(prj)
+-				
++
+ 		-- per-file rules
+ 		for _, file in ipairs(prj.files) do
+ 			if path.iscppfile(file) then
+@@ -145,7 +145,7 @@
+ 				end
+ 
+ 				if not (prj.solution.nasmpath) then
+-					prj.solution.nasmpath = 'nasm'				
++					prj.solution.nasmpath = 'nasm'			
+ 				end
+ 
+ 				_p('\t$(SILENT)'.._MAKE.esc(prj.solution.nasmpath)..' '..opts..' -i'.._MAKE.esc(path.getdirectory(file))..'/'..' -f '..
+@@ -244,10 +244,10 @@
+ 			_p('  AR         = %s', platform.ar)
+ 		end
+ 		if not(cfg.gnuexternals) then
+-			cfg.gnuexternal = { }		
++			cfg.gnuexternal = { }
+ 		end 
+ 
+-		_p('  OBJDIR     = %s', _MAKE.esc(cfg.objectsdir))		
++		_p('  OBJDIR     = %s', _MAKE.esc(cfg.objectsdir))	
+ 		_p('  TARGETDIR  = %s', _MAKE.esc(cfg.buildtarget.directory))
+ 		_p('  TARGET     = $(TARGETDIR)/%s', _MAKE.esc(cfg.buildtarget.name))
+ 		_p('  DEFINES   += %s', table.concat(cc.getdefines(cfg.defines), " "))
+@@ -258,12 +258,12 @@
+ 		_.pchconfig(cfg)
+ 				
+ 		_p('  CFLAGS    += $(CPPFLAGS) %s', table.concat(table.join(cc.getcflags(cfg), cfg.buildoptions), " "))
+-		_p('  CXXFLAGS  += $(CFLAGS) %s', table.concat(cc.getcxxflags(cfg), " "))
++		_p('  CXXFLAGS  += $(CPPFLAGS) %s', table.concat(table.join(cc.getcxxflags(cfg), cfg.buildoptions), " "))	
+ 		_p('  LDFLAGS   += %s', table.concat(table.join(cc.getldflags(cfg), cfg.linkoptions, cc.getlibdirflags(cfg)), " "))
+ 		_p('  LIBS      += %s %s', table.concat(cc.getlinkflags(cfg), " "), table.concat(cfg.gnuexternals, " "))
+ 		_p('  RESFLAGS  += $(DEFINES) $(INCLUDES) %s', table.concat(table.join(cc.getdefines(cfg.resdefines), cc.getincludedirs(cfg.resincludedirs), cfg.resoptions), " "))
+ 		_p('  LDDEPS    += %s', table.concat(_MAKE.esc(premake.getlinks(cfg, "static", "fullpath")), " "))
+-		
++
+ 		if cfg.kind == "StaticLib" then
+ 			if cfg.platform:startswith("Universal") then
+ 				_p('  LINKCMD    = libtool -o $(TARGET) $(OBJECTS)')
+@@ -284,7 +284,7 @@
+ 			_p('  LINKCMD    = $(%s) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) %s $(LIBS)', 
+ 			iif(cfg.language == "C", "CC", "CXX"), lddeps)
+ 		end
+-		
++
+ 		_p('  define PREBUILDCMDS')
+ 		if #cfg.prebuildcommands > 0 then
+ 			_p('\t@echo Running pre-build commands')
+@@ -315,7 +315,7 @@
+ -- Precompiled header support
+ --
+ 
+-	function _.pchconfig(cfg)			
++	function _.pchconfig(cfg)
+ 		if not cfg.flags.NoPCH and cfg.pchheader then
+ 			_p('  PCH        = %s', _MAKE.esc(cfg.pchheader))
+ 			_p('  GCH        = $(OBJDIR)/%s.gch', _MAKE.esc(path.getname(cfg.pchheader))) 
+--- build/premake/premake4/build/gmake.unix/Premake4.make
++++ build/premake/premake4/build/gmake.unix/Premake4.make
+@@ -26,9 +26,8 @@
+   DEFINES   += -DNDEBUG -DLUA_USE_POSIX -DLUA_USE_DLOPEN
+   INCLUDES  += -I../../src/host/lua-5.1.4/src
+   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
+-  CFLAGS    += $(CPPFLAGS) -Wall -Os
+-  CXXFLAGS  += $(CFLAGS) 
+-  LDFLAGS   += -s -rdynamic
++  CFLAGS    += $(CPPFLAGS)
++  LDFLAGS   += -rdynamic
+   LIBS      += -lm -ldl 
+   RESFLAGS  += $(DEFINES) $(INCLUDES) 
+   LDDEPS    += 
+@@ -48,8 +47,7 @@
+   DEFINES   += -D_DEBUG -DLUA_USE_POSIX -DLUA_USE_DLOPEN
+   INCLUDES  += -I../../src/host/lua-5.1.4/src
+   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
+-  CFLAGS    += $(CPPFLAGS) -Wall -g
+-  CXXFLAGS  += $(CFLAGS) 
++  CFLAGS    += $(CPPFLAGS) -g
+   LDFLAGS   += -rdynamic
+   LIBS      += -lm -ldl 
+   RESFLAGS  += $(DEFINES) $(INCLUDES) 
