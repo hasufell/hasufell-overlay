@@ -2,13 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header:
 
-EAPI=2
+EAPI=4
 
-inherit vcs-snapshot games
+inherit gnome2-utils games vcs-snapshot
 
 DESCRIPTION="Solve routing puzzles in the inner city with Cube Trains"
 HOMEPAGE="http://ddr0.github.com/"
-SRC_URI="https://github.com/DDR0/Cube_Trains/zipball/${PV} -> ${P}.zip"
+SRC_URI="https://github.com/DDR0/Cube_Trains/tarball/${PV} -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -24,12 +24,7 @@ RDEPEND=">=dev-libs/boost-1.35
 	sys-libs/zlib
 	virtual/opengl
 	virtual/glu"
-DEPEND="${RDEPEND}
-	app-arch/unzip"
-
-src_unpack() {
-	vcs-snapshot_src_unpack
-}
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	epatch "${FILESDIR}"/${P}-build.patch \
@@ -37,16 +32,30 @@ src_prepare() {
 }
 
 src_install() {
-	newgamesbin game ${PN}-bin || die
+	newgamesbin game ${PN}-bin
 	games_make_wrapper ${PN} ${PN}-bin "${GAMES_DATADIR}/${PN}"
 
 	insinto "${GAMES_DATADIR}"/${PN}
-	doins master-config.cfg *.ttf || die
+	doins master-config.cfg *.ttf
 
 	insinto "${GAMES_DATADIR}"/${PN}/modules/cube_trains
-	doins -r modules/cube_trains/* || die "doins failed"
+	doins -r modules/cube_trains/*
 
-	newicon modules/cube_trains/images/window-icon.png ${PN}.png
+	newicon -s 32 modules/cube_trains/images/window-icon.png ${PN}.png
 	make_desktop_entry ${PN}
 	prepgamesdirs
+}
+
+pkg_preinst() {
+	games_pkg_preinst
+	gnome2_icon_savelist
+}
+
+pkg_postinst() {
+	games_pkg_postinst
+	gnome2_icon_cache_update
+}
+
+pkg_postrm() {
+	gnome2_icon_cache_update
 }
