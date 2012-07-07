@@ -3,11 +3,11 @@ Date: Tue Jun  5 23:20:10 UTC 2012
 Subject: build system
 
 fix linking for linkers that don't allow underlinking
-applied on top of cubetrain-${PV}-build.patch
+applied on top of cubetrains-${PV}-build.patch
 
 --- Makefile
 +++ Makefile
-@@ -7,14 +7,16 @@
+@@ -14,14 +14,16 @@
  	    -I/usr/include/boost \
  	    -I/sw/include/SDL \
  	    -Isrc/
