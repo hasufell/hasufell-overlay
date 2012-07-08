@@ -1,14 +1,22 @@
 From: Julian Ospald <hasufell@gentoo.org>
-Date: Fri May 25 02:00:10 UTC 2012
+Date: Sun Jul  8 08:35:55 UTC 2012
 Subject: build system
 
 --- Makefile
 +++ Makefile
-@@ -1,27 +1,67 @@
+@@ -1,27 +1,76 @@
 -CC  = ccache gcc
 -CXX = ccache g++
 +CC  ?= gcc
 +CXX ?= g++
+ 
+-OPT = -O2 -fno-inline-functions
++# set to 'yes' to optimize code using -O2
++OPTIMIZE=no
++
++ifeq ($(OPTIMIZE),yes)
++CXXFLAGS += -O2
++endif
 +
 +CXXFLAGS += -Wnon-virtual-dtor -Werror=return-type
 +
@@ -16,42 +24,43 @@ Subject: build system
 +	    -I/usr/include/boost \
 +	    -I/sw/include/SDL \
 +	    -Isrc/
-+LIBS += -lSDLmain \
++
++LIBS += $(shell pkg-config --libs x11) \
++	-lSDLmain \
 +	$(shell pkg-config --libs sdl) \
 +	$(shell pkg-config --libs glu) \
 +	$(shell pkg-config --libs glew) \
 +	$(shell pkg-config --libs SDL_image) \
 +	$(shell pkg-config --libs SDL_ttf) \
 +	$(shell pkg-config --libs SDL_mixer) \
-+	$(shell pkg-config --libs libpng)
++	$(shell pkg-config --libs libpng) \
++	$(shell pkg-config --libs zlib)
 +
 +LDFLAGS += -L/sw/lib \
 +	   -L/usr/lib \
 +	   -L.
- 
--OPT = -O2 -fno-inline-functions
  
  include Makefile.common
  
  %.o : src/%.cpp
 -	$(CXX) $(CCFLAGS) -DIMPLEMENT_SAVE_PNG -fno-inline-functions -g $(OPT) `sdl-config --cflags` -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Werror=return-type -fthreadsafe-statics -c $<
 +	$(CXX) \
-+		$(CXXFLAGS) -fno-inline-functions -fthreadsafe-statics $(CPPFLAGS) -DIMPLEMENT_SAVE_PNG \
++		$(CXXFLAGS) -fno-inline-functions -fthreadsafe-statics -fno-strict-aliasing $(CPPFLAGS) -DIMPLEMENT_SAVE_PNG \
 +		-c $<
  
  game: $(objects)
 -	$(CXX) $(CCFLAGS) -g $(OPT) -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Werror=return-type $(objects) -o game -L. -L/sw/lib -L. -L/usr/lib `sdl-config --libs` -lSDLmain -lSDL -lGL -lGLU -lGLEW -lSDL_image -lSDL_ttf -lSDL_mixer -lpng -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
 +	$(CXX) \
 +		$(LDFLAGS) \
-+		$(CXXFLAGS) -fno-inline-functions $(CPPFLAGS) \
++		$(CXXFLAGS) -fno-inline-functions -fthreadsafe-statics -fno-strict-aliasing $(CPPFLAGS) \
 +		$(objects) -o game \
-+		$(LIBS) -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
++		$(LIBS) -lboost_regex-mt -lboost_system-mt -lpthread
  
  server: $(server_objects)
 -	$(CXX) -fno-inline-functions -g $(OPT) -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Werror=return-type -fthreadsafe-statics $(server_objects) -o server -L/sw/lib -L/usr/lib `sdl-config --libs` -lSDLmain -lSDL -lGL -lGLU -lSDL_image -lSDL_ttf -lSDL_mixer -lboost_regex-mt -lboost_system-mt -lboost_thread-mt -lboost_iostreams-mt
 +	$(CXX) \
 +		$(LDFLAGS) \
-+		$(CXXFLAGS) -fno-inline-functions -fthreadsafe-statics $(CPPFLAGS) \
++		$(CXXFLAGS) -fno-inline-functions -fthreadsafe-statics -fno-strict-aliasing $(CPPFLAGS) \
 +		$(server_objects) -o server \
 +		$(LIBS) -lboost_regex-mt -lboost_system-mt -lboost_thread-mt -lboost_iostreams-mt
  

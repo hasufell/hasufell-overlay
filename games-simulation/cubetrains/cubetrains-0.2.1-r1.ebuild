@@ -27,8 +27,7 @@ RDEPEND=">=dev-libs/boost-1.35
 DEPEND="${RDEPEND}"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-build.patch \
-		"${FILESDIR}"/${P}-underlinking.patch
+	epatch "${FILESDIR}"/${P}-build.patch
 }
 
 src_install() {
