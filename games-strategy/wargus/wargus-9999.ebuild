@@ -37,6 +37,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DBINDIR="${GAMES_BINDIR}"
+		-DGAMEDIR="${GAMES_BINDIR}"
 		-DSTRATAGUS="${GAMES_BINDIR}"/stratagus
 		-DICONDIR=/usr/share/icons/hicolor/64x64/apps
 	)

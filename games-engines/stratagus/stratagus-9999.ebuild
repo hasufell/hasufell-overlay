@@ -45,6 +45,7 @@ src_configure() {
 	use debug && CMAKE_BUILD_TYPE=Debug
 	local mycmakeargs=(
 		-DBINDIR="${GAMES_BINDIR}"
+		-DGAMEDIR="${GAMES_BINDIR}"
 		-DSBINDIR="${GAMES_BINDIR}"
 		$(cmake-utils_use_with bzip2 BZIP2)
 		$(cmake-utils_use_enable doc DOC)
