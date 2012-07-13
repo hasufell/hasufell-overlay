@@ -19,7 +19,21 @@ make DATA_INSTALL_DIR and game paths compatible with absolute paths
  
  # Detect missing dependencies
  
-@@ -163,10 +167,10 @@
+@@ -155,18 +159,22 @@
+ 
+ Target_Link_Libraries (flare ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} ${SDLMAIN_LIBRARY})
+ 
+-
+-set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/flare)
++# desktop file
++If(NOT IS_ABSOLUTE "${BINDIR}")
++	set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/flare)
++Else(NOT IS_ABSOLUTE "${BINDIR}")
++	set(FLARE_EXECUTABLE_PATH ${BINDIR}/flare)
++EndIf(NOT IS_ABSOLUTE "${BINDIR}")
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop")
+ 
+ 
  # installing to the proper places
  install(PROGRAMS
    ${CMAKE_CURRENT_BINARY_DIR}/flare
@@ -32,3 +46,4 @@ make DATA_INSTALL_DIR and game paths compatible with absolute paths
  install(FILES
    "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+
