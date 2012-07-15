@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
-inherit games fdo-mime
+inherit fdo-mime gnome2-utils games
 
 DESCRIPTION="ePSXe PlayStation Emulator"
 HOMEPAGE="http://www.epsxe.com/"
 SRC_URI="http://www.epsxe.com/files/epsxe${PV//.}lin.zip
-	http://img.uptodown.net/icons/${PN}-1-6-0.jpg"
+	http://dev.gentoo.org/~hasufell/distfiles/${PN}.png"
 
 LICENSE="freedist"
 SLOT="0"
@@ -36,19 +36,25 @@ src_install() {
 		"${D}${GAMES_BINDIR}"/epsxe \
 		|| die
 	exeinto "${dir}"
-	doexe epsxe || die
+	doexe epsxe
 	insinto "${dir}"
-	doins keycodes.lst || die
+	doins keycodes.lst
 	insinto "$(games_get_libdir)"/psemu/cheats
-	doins cheats/* || die
-	dodoc docs/* || die
-	newicon "${DISTDIR}"/${PN}-1-6-0.jpg ${PN}.jpg || die
-	domenu "${FILESDIR}"/epsxe.desktop || die
+	doins cheats/*
+	dodoc docs/*
+	doicon -s 32 "${DISTDIR}"/${PN}.png
+	domenu "${FILESDIR}"/epsxe.desktop
 	prepgamesdirs
+}
+
+pkg_preinst() {
+	games_pkg_preinst
+	gnome2_icon_savelist
 }
 
 pkg_postinst() {
 	fdo-mime_desktop_database_update
+	gnome2_icon_cache_update
 	games_pkg_postinst
 	ewarn "                                                 "
 	ewarn "You need at least plugins for sound and video and"
@@ -61,4 +67,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	fdo-mime_desktop_database_update
+	gnome2_icon_cache_update
 }

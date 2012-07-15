@@ -2,9 +2,9 @@
 Name=ePSXe
 GenericName=Emulator
 Comment=ePSXe PlayStation Emulator
-Categories=Game
-Exec=/usr/games/bin/epsxe
-Icon=epsxe.jpg
+Categories=Game;
+Exec=epsxe
+Icon=epsxe
 StartupNotify=true
 Terminal=false
 Type=Application
