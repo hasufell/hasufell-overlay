@@ -10,7 +10,7 @@ MY_PN="Unvanquished"
 
 DESCRIPTION="Datafiles and maps for unvanquished"
 HOMEPAGE="http://unvanquished.net/"
-SRC_URI="mirror://sourceforge/${PN%-data}/${MY_PN}-${PV}.zip"
+SRC_URI="mirror://sourceforge/${PN%-data}/${MY_PN}_${PV}.zip"
 
 LICENSE=""
 SLOT="0"
