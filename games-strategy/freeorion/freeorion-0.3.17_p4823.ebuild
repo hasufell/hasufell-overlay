@@ -37,6 +37,12 @@ DEPEND="${RDEPEND}
 CMAKE_USE_DIR="${S}"/FreeOrion
 CMAKE_VERBOSE="1"
 
+pkg_setup() {
+	python_set_active_version 2
+	python_pkg_setup
+	games_pkg_setup
+}
+
 src_unpack() {
 	subversion_src_unpack
 }
