@@ -37,7 +37,7 @@
  
  spuPeopsOSS :	$(OBJ)
 -		$(LINK) $(LINKFLAGS) $(OBJ) $(LIB)
-+		$(CC) $(CFLAGS) $(LINKFLAGS) $(OBJ) $(LIB)
++		$(CC) $(CFLAGS) $(LDFLAGS) $(LINKFLAGS) $(OBJ) $(LIB)
  
  ##############################################################################
  # 3. GENERAL RULES

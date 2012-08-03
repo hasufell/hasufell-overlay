@@ -21,12 +21,15 @@ DEPEND="alsa? ( media-libs/alsa-lib )
 RDEPEND="${DEPEND}
 	amd64? ( app-emulation/emul-linux-x86-gtklibs )"
 
+QA_PREBUILT="$(games_get_libdir)/psemu/cfg/cfgPeopsOSS"
+
 S="${WORKDIR}"/src
 
 pkg_setup() {
 	if use !alsa && use !oss ; then
 		die "must select oss or alsa"
 	fi
+	games_pkg_setup
 }
 
 src_unpack() {
