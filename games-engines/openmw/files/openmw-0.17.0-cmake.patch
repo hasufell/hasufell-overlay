@@ -1,0 +1,76 @@
+From: Julian Ospald <hasufell@gentoo.org>
+Date: Thu Aug 30 23:30:05 UTC 2012
+Subject: build system
+
+add install rules
+remove random flags
+
+--- openmw-0.17.0/CMakeLists.txt
++++ openmw-0.17.0/CMakeLists.txt
+@@ -42,6 +42,16 @@
+ 
+ find_program(DPKG_PROGRAM dpkg DOC "dpkg program of Debian-based systems")
+ 
++# paths
++set(BINDIR "bin" CACHE PATH "Where to install binaries")
++set(DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH "Sets the root of data directories to a non-default location")
++set(DATADIR "${CMAKE_INSTALL_PREFIX}/share/openmw" CACHE PATH "Sets the openmw data directories to a non-default location")
++set(DOCDIR "${DATAROOTDIR}/doc/openmw" CACHE PATH "Sets the doc directory to a non-default location.")
++set(MANDIR "${DATAROOTDIR}/man" CACHE PATH "Where to install manpages")
++set(SYSCONFDIR "" CACHE PATH "Set config dir")
++set(ICONDIR "share/pixmaps" CACHE PATH "Set icon dir")
++
++
+ # Location of morrowind data files
+ if(DPKG_PROGRAM)
+     set(MORROWIND_DATA_FILES "/usr/share/games/openmw/data/" CACHE PATH "location of Morrowind data files")
+@@ -307,20 +317,6 @@
+         "${OpenMW_BINARY_DIR}/openmw.desktop")
+ endif()
+ 
+-# Compiler settings
+-if (CMAKE_COMPILER_IS_GNUCC)
+-    add_definitions (-Wall -Wextra -Wno-unused-parameter -Wno-reorder)
+-
+-    # Silence warnings in OGRE headers. Remove once OGRE got fixed!
+-    add_definitions (-Wno-ignored-qualifiers)
+-
+-    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion
+-                OUTPUT_VARIABLE GCC_VERSION)
+-    if ("${GCC_VERSION}" VERSION_GREATER 4.6 OR "${GCC_VERSION}" VERSION_EQUAL 4.6)
+-        add_definitions (-Wno-unused-but-set-parameter)
+-    endif("${GCC_VERSION}" VERSION_GREATER 4.6 OR "${GCC_VERSION}" VERSION_EQUAL 4.6)
+-endif (CMAKE_COMPILER_IS_GNUCC)
+-
+ if(DPKG_PROGRAM)
+     SET(CMAKE_INSTALL_PREFIX "/usr")
+ 
+@@ -627,3 +623,28 @@
+         " COMPONENT Runtime)
+         include(CPack)
+ endif (APPLE)
++
++if (UNIX AND NOT APPLE)
++## Linux building
++
++	# Install binaries
++	INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/openmw" DESTINATION "${BINDIR}" )
++	INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/omwlauncher" DESTINATION "${BINDIR}" )
++	INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/esmtool" DESTINATION "${BINDIR}" )
++	INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/mwiniimport" DESTINATION "${BINDIR}" )
++
++	# Install icon and .desktop
++	INSTALL(FILES "${OpenMW_SOURCE_DIR}/apps/launcher/resources/images/openmw.png" DESTINATION "${ICONDIR}")
++	INSTALL(FILES "${OpenMW_BINARY_DIR}/openmw.desktop" DESTINATION "share/applications")
++
++	# Install global configuration files
++	INSTALL(FILES "${OpenMW_BINARY_DIR}/openmw.cfg.install" DESTINATION "${SYSCONFDIR}" RENAME "openmw.cfg" )
++	INSTALL(FILES "${OpenMW_BINARY_DIR}/settings-default.cfg" DESTINATION "${SYSCONFDIR}" )
++	INSTALL(FILES "${OpenMW_BINARY_DIR}/transparency-overrides.cfg" DESTINATION "${SYSCONFDIR}" )
++	INSTALL(FILES "${OpenMW_BINARY_DIR}/launcher.cfg" DESTINATION "${SYSCONFDIR}" )
++
++	# Install resources
++	INSTALL(DIRECTORY "${OpenMW_BINARY_DIR}/resources" DESTINATION "${DATADIR}" )
++	INSTALL(FILES "${OpenMW_BINARY_DIR}/launcher.qss" DESTINATION "${DATADIR}/resources" )
++endif (UNIX AND NOT APPLE)
++
