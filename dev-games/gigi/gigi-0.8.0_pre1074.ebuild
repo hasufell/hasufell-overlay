@@ -69,6 +69,9 @@ src_prepare() {
 	# fix devil (apply after libtool.patch)
 	epatch "${FILESDIR}"/${P}-devil.patch
 
+	# fix compilation with boost-1.49
+	epatch "${FILESDIR}"/${P}-boost-1.49.patch
+
 	python_convert_shebangs 2 GG/GG/gen_signals.py
 }
 
