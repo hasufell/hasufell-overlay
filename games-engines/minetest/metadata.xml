@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>hasufell@gentoo.org</email>
+		<name>Julian Ospald</name>
+	</maintainer>
+	<use>
+		<flag name="server">Build minetest server</flag>
+	</use>
+	<longdescription lang="en">
+		Minetest is an infinite-world block sandbox game and a game engine,
+		inspired by InfiniMiner, Minecraft and the like.
+
+		Features:
+		- Walk around, dig and build in an infinite voxel world (or boxel,
+		as reddit calls it), and craft stuff from raw materials to help you
+		along the way. We hope to add in some survival elements, but not
+		much really exist ATM.
+		- Sinfully easy server-side modding API.
+		- Multiplayer support for tens of players, via servers hosted by
+		users
+		- Voxel based dynamic lighting (quite similar to Minecraft; light
+		up caves with torches)
+		- Almost infinite world and a fairly good map generator (limited
+		to +-31000 blocks in all directions at the moment)
+		- Runs natively on Windows and Linux (C++ and Irrlicht. No Java.)
+	</longdescription>
+</pkgmetadata>
+
