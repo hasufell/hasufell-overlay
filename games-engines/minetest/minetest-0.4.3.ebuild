@@ -20,6 +20,7 @@ IUSE="dedicated nls +server"
 
 RDEPEND="dev-db/sqlite:3
 	dev-lang/lua
+	>=dev-libs/jthread-1.2
 	sys-libs/zlib
 	!dedicated? (
 		app-arch/bzip2
@@ -34,9 +35,7 @@ RDEPEND="dev-db/sqlite:3
 	)"
 DEPEND="${RDEPEND}
 	>=dev-games/irrlicht-1.7
-	>=dev-libs/jthread-1.2
-	nls? ( sys-devel/gettext )
-	"
+	nls? ( sys-devel/gettext )"
 
 src_unpack() {
 	git-2_src_unpack
