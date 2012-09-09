@@ -2,6 +2,16 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*0ad-12636_alpha11 (09 Sep 2012)
+
+  09 Sep 2012; Julian Ospald <hasufell@gentoo.org> -0ad-11339_alpha9.ebuild,
+  -0ad-11863_alpha10.ebuild, -0ad-11863_alpha10-r1.ebuild,
+  -files/0ad-11339_alpha9-fcollada-makefile.patch,
+  -files/0ad-11339_alpha9-test.patch, -files/0ad-11863_alpha10-gentoo.patch,
+  +0ad-12636_alpha11.ebuild, +files/0ad-12636_alpha11-gentoo.patch,
+  +files/0ad-12636_alpha11-pch.patch, 0ad-99999.ebuild:
+  version bump, remove old
+
   01 Jul 2012; Julian Ospald <hasufell@gentoo.org> ChangeLog:
   revision bump: bump to EAPI=4, respect flags, restructure build process to
   avoid using update-workspaces.sh, fix test phase

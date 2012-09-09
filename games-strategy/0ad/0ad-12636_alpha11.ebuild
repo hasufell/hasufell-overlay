@@ -6,17 +6,16 @@ EAPI=4
 
 WX_GTK_VER="2.8"
 
-inherit eutils flag-o-matic wxwidgets toolchain-funcs games
+inherit eutils wxwidgets toolchain-funcs games
 
-MY_P="${PN}-r${PV%_*}-alpha"
-
+MY_P=0ad-0.0.11-alpha
 DESCRIPTION="A free, real-time strategy game"
 HOMEPAGE="http://wildfiregames.com/0ad/"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-build.tar.xz"
 
 LICENSE="GPL-2 LGPL-2.1 MIT CCPL-Attribution-ShareAlike-3.0 as-is"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86 -*"
 IUSE="+audio editor fam pch test"
 
 RDEPEND="
@@ -45,16 +44,15 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${MY_P}
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-gentoo.patch
+	epatch "${FILESDIR}"/${P}-{gentoo,pch}.patch
 }
 
 src_configure() {
-	use pch && append-cflags "-fpch-preprocess"
-
 	local myconf=(
 		--with-system-nvtt
 		--with-system-enet
 		--with-system-mozjs185
+		--minimal-flags
 		$(usex fam "" "--without-fam")
 		$(usex pch "" "--without-pch")
 		$(usex test "" "--without-tests")
