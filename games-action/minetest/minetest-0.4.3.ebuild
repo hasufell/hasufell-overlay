@@ -5,11 +5,9 @@
 EAPI=4
 inherit eutils cmake-utils gnome2-utils vcs-snapshot games
 
-MY_P=${PN}_game-${PV}
 DESCRIPTION="Building single/multiplayer game similar to Minecraft"
 HOMEPAGE="http://c55.me/minetest/"
-SRC_URI="http://github.com/celeron55/minetest/tarball/${PV} -> ${P}.tar.gz
-	http://github.com/celeron55/minetest_game/tarball/${PV} -> ${MY_P}.tar.gz"
+SRC_URI="http://github.com/celeron55/minetest/tarball/${PV} -> ${P}.tar.gz"
 
 LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
@@ -19,7 +17,6 @@ IUSE="dedicated nls +server"
 RDEPEND="dev-db/sqlite:3
 	dev-lang/lua
 	>=dev-libs/jthread-1.2
-	!games-action/minetest_game
 	sys-libs/zlib
 	!dedicated? (
 		app-arch/bzip2
@@ -36,7 +33,6 @@ RDEPEND="dev-db/sqlite:3
 # XXX: support shared lib for irrlicht
 DEPEND="${RDEPEND}
 	>=dev-games/irrlicht-1.7
-	!games-action/minetest_game
 	nls? ( sys-devel/gettext )"
 
 src_unpack() {
@@ -70,11 +66,6 @@ src_compile() {
 
 src_install() {
 	cmake-utils_src_install
-
-	insinto "${GAMES_DATADIR}"/${PN}/games/${PN}
-	doins -r "${WORKDIR}"/${MY_P}/mods
-	doins "${WORKDIR}"/${MY_P}/game.conf
-
 	prepgamesdirs
 }
 
@@ -86,6 +77,13 @@ pkg_preinst() {
 pkg_postinst() {
 	games_pkg_postinst
 	gnome2_icon_cache_update
+
+	if ! use dedicated ; then
+		echo
+		elog "optional dependencies:"
+		elog "	games-action/minetest_game (official mod)"
+		echo
+	fi
 }
 
 pkg_postrm() {
