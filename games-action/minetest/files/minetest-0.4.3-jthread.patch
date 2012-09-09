@@ -2,6 +2,7 @@ From: hasufell <julian.ospald@googlemail.com>
 Date: Mon Apr 23 21:34:29 UTC 2012
 
 fix FIND_PATH to correctly find jthread
+use shared lib
 
 --- cmake/Modules/FindJthread.cmake
 +++ cmake/Modules/FindJthread.cmake
@@ -12,7 +13,7 @@ fix FIND_PATH to correctly find jthread
 +FIND_PATH(JTHREAD_INCLUDE_DIR jthread.h PATHS /usr/include/jthread)
  
 -FIND_LIBRARY(JTHREAD_LIBRARY NAMES jthread)
-+FIND_LIBRARY(JTHREAD_LIBRARY NAMES libjthread.a)
++FIND_LIBRARY(JTHREAD_LIBRARY NAMES libjthread.so)
  
  IF(JTHREAD_LIBRARY AND JTHREAD_INCLUDE_DIR)
  	SET( JTHREAD_FOUND TRUE )

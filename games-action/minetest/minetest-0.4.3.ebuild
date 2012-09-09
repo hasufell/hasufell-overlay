@@ -3,10 +3,13 @@
 # $Header: $
 
 EAPI=4
-inherit eutils cmake-utils git-2 gnome2-utils vcs-snapshot games
+inherit eutils cmake-utils gnome2-utils vcs-snapshot games
 
+MY_P=${PN}_game-${PV}
 DESCRIPTION="Building single/multiplayer game similar to Minecraft"
 HOMEPAGE="http://c55.me/minetest/"
+SRC_URI="http://github.com/celeron55/minetest/tarball/${PV} -> ${P}.tar.gz
+	http://github.com/celeron55/minetest_game/tarball/${PV} -> ${MY_P}.tar.gz"
 
 LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
@@ -14,6 +17,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="dedicated nls +server"
 
 RDEPEND="dev-db/sqlite:3
+	dev-lang/lua
+	>=dev-libs/jthread-1.2
 	!games-action/minetest_game
 	sys-libs/zlib
 	!dedicated? (
@@ -31,15 +36,19 @@ RDEPEND="dev-db/sqlite:3
 # XXX: support shared lib for irrlicht
 DEPEND="${RDEPEND}
 	>=dev-games/irrlicht-1.7
+	!games-action/minetest_game
 	nls? ( sys-devel/gettext )"
 
 src_unpack() {
-	EGIT_REPO_URI="git://github.com/celeron55/${PN}.git" \
-	git-2_src_unpack
+	vcs-snapshot_src_unpack
+}
 
-	EGIT_REPO_URI="git://github.com/celeron55/minetest_game.git" \
-	EGIT_SOURCEDIR="${WORKDIR}/minetest_game" \
-	git-2_src_unpack
+src_prepare() {
+	epatch \
+		"${FILESDIR}"/${P}-jthread.patch \
+		"${FILESDIR}"/${P}-lua.patch
+
+	rm -r src/{jthread,lua,sqlite} || die
 }
 
 src_configure() {
@@ -63,8 +72,8 @@ src_install() {
 	cmake-utils_src_install
 
 	insinto "${GAMES_DATADIR}"/${PN}/games/${PN}
-	doins -r "${WORKDIR}"/minetest_game/mods
-	doins "${WORKDIR}"/minetest_game/game.conf
+	doins -r "${WORKDIR}"/${MY_P}/mods
+	doins "${WORKDIR}"/${MY_P}/game.conf
 
 	prepgamesdirs
 }
