@@ -1,2 +1,3 @@
 move games-action/minetest games-engines/minetest
 move games-engines/minetest games-action/minetest
+move games-engines/flare games-rpg/flare
