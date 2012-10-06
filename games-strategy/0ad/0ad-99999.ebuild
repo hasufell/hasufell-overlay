@@ -11,7 +11,7 @@ inherit eutils subversion wxwidgets games
 MY_PV="r${PV%_*}-alpha"
 MY_P=${PN}-${MY_PV}
 
-DESCRIPTION="A free, real-time strategy game"
+DESCRIPTION="A free, real-time strategy game of ancient warfare"
 HOMEPAGE="http://wildfiregames.com/0ad/"
 ESVN_REPO_URI="http://svn.wildfiregames.com/public/ps/trunk"
 
@@ -101,7 +101,7 @@ src_install() {
 	dodoc binaries/system/readme.txt
 	doicon build/resources/${PN}.png
 	games_make_wrapper ${PN} "${GAMES_BINDIR}/pyrogenesis"
-	make_desktop_entry ${PN}
+	make_desktop_entry ${PN} "0 A.D."
 
 	# permissions
 	prepgamesdirs
