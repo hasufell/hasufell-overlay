@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit eutils flag-o-matic gnome2-utils cmake-utils games
+inherit eutils gnome2-utils cmake-utils games
 
 DESCRIPTION="An open source reimplementation of TES III: Morrowind"
 HOMEPAGE="http://openmw.org/"
@@ -18,7 +18,7 @@ IUSE="cdinstall ffmpeg +mpg123 test"
 # XXX static build
 RDEPEND=">=dev-games/mygui-3.2.0
 	>=dev-games/ogre-1.8.0[cg,freeimage,ois,opengl,zip]
-	dev-games/ois	
+	dev-games/ois
 	>=dev-libs/boost-1.46.0
 	<dev-libs/boost-1.49
 	media-libs/freetype:2
