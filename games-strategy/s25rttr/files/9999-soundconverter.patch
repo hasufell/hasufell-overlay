@@ -11,7 +11,7 @@ into datadir by default
  	/* 55 */SETTINGSDIR "/LSTS/SOUND.LST",            // Die konvertierte sound.lst
  	/* 56 */RTTRDIR "/sound.scs",                     // Das konvertier-script
 -	/* 57 */RTTRDIR "",                               // Basispfad fürn Soundconverter
-+	/* 57 */DRIVERDIR "",                                // Basispfad fürn Soundconverter
++	/* 57 */DRIVERDIR "",                             // Basispfad fürn Soundconverter
  	/* 58 */GAMEDIR "/DATA/MIS0BOBS.LST",
  	/* 59 */GAMEDIR "/DATA/MIS1BOBS.LST",
  	/* 60 */GAMEDIR "/DATA/MIS2BOBS.LST",
