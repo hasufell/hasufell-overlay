@@ -12,7 +12,7 @@ SRC_URI="https://github.com/gerstrong/Commander-Genius/tarball/701372953e9cf02f5
 
 LICENSE="|| ( GPL-1 GPL-2 GPL-3 ) LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="tremor"
 
 RDEPEND="media-libs/libogg
