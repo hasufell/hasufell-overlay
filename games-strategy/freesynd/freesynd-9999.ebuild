@@ -8,7 +8,7 @@ inherit cmake-utils eutils subversion games
 
 DESCRIPTION="A cross-platform reimplementation of engine for the classic Bullfrog game, Syndicate"
 HOMEPAGE="http://freesynd.sourceforge.net/"
-ESVN_REPO_URI="https://${PN}.svn.sourceforge.net/svnroot/${PN}/${PN}/trunk"
+ESVN_REPO_URI="svn://svn.code.sf.net/p/freesynd/code/freesynd/trunk"
 
 LICENSE="GPL-3"
 SLOT="0"
