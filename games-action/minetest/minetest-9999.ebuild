@@ -9,7 +9,7 @@ DESCRIPTION="Building single/multiplayer game similar to Minecraft"
 HOMEPAGE="http://c55.me/minetest/"
 GIT_REPO_URI="git://github.com/celeron55/${PN}.git"
 
-LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0"
+LICENSE="LGPL-2.1+ CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
 KEYWORDS=""
 IUSE="dedicated nls +server"
