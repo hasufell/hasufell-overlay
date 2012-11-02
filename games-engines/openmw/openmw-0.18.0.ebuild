@@ -20,7 +20,6 @@ RDEPEND=">=dev-games/mygui-3.2.0
 	>=dev-games/ogre-1.8.0[cg,freeimage,ois,opengl,zip]
 	dev-games/ois
 	>=dev-libs/boost-1.46.0
-	<dev-libs/boost-1.49
 	media-libs/freetype:2
 	media-libs/openal
 	>=sci-physics/bullet-2.80
@@ -55,14 +54,6 @@ src_prepare() {
 }
 
 src_configure() {
-	local boost_ver=$(best_version "<dev-libs/boost-1.49")
-
-	boost_ver=${boost_ver/*boost-/}
-	boost_ver=${boost_ver%.*}
-	boost_ver=${boost_ver/./_}
-
-	einfo "Using boost version ${boost_ver}"
-
 	local mycmakeargs=(
 		$(cmake-utils_use_build test UNITTESTS)
 		$(cmake-utils_use_use ffmpeg FFMPEG)
@@ -74,7 +65,6 @@ src_configure() {
 		-DMORROWIND_DATA_FILES="${GAMES_DATADIR}"/morrowind-data
 		-DMORROWIND_RESOURCE_FILES="${GAMES_DATADIR}"/${PN}/resources
 		-DUSE_AUDIERE=OFF
-		-DBOOST_ROOT="/usr/include/boost-${boost_ver}"
 	)
 
 	cmake-utils_src_configure
