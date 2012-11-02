@@ -1,0 +1,26 @@
+#!/sbin/runscript
+
+depend() {
+	need net
+	provide mineserver
+}
+
+start() {
+	start-stop-daemon \
+		--start \
+		--user minetest \
+		--group minetest \
+		--make-pidfile \
+		--background \
+		--stdout /var/lib/minetest/server.log \
+		--exec /usr/games/bin/minetestserver \
+		--pidfile /var/run/minetest.pid
+}
+
+stop() {
+	start-stop-daemon \
+		--stop \
+		--exec /usr/games/bin/minetestserver \
+		--pidfile /var/run/minetest.pid
+}
+
