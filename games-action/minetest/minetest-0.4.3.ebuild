@@ -5,7 +5,7 @@
 EAPI=4
 inherit eutils cmake-utils gnome2-utils vcs-snapshot games
 
-DESCRIPTION="Building single/multiplayer game similar to Minecraft"
+DESCRIPTION="An InfiniMiner/Minecraft inspired game."
 HOMEPAGE="http://c55.me/minetest/"
 SRC_URI="http://github.com/celeron55/minetest/tarball/${PV} -> ${P}.tar.gz"
 
@@ -24,6 +24,7 @@ RDEPEND="dev-db/sqlite:3
 		media-libs/libpng:0
 		media-libs/libvorbis
 		media-libs/openal
+		virtual/glu
 		virtual/jpeg
 		virtual/opengl
 		x11-libs/libX11
@@ -72,6 +73,10 @@ src_install() {
 pkg_preinst() {
 	games_pkg_preinst
 	gnome2_icon_savelist
+
+	enewgroup minetest
+	enewuser minetest -1 -1 /var/lib/minetest "minetest,games"
+	doinitd "${FILESDIR}/minetestserver.init"
 }
 
 pkg_postinst() {
@@ -79,10 +84,8 @@ pkg_postinst() {
 	gnome2_icon_cache_update
 
 	if ! use dedicated ; then
-		echo
 		elog "optional dependencies:"
 		elog "	games-action/minetest_game (official mod)"
-		echo
 	fi
 }
 
