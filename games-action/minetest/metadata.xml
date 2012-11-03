@@ -6,7 +6,6 @@
 		<name>hasufell</name>
 	</maintainer>
 	<use>
-		<flag name="client">Minetest client</flag>
 		<flag name="server">Minetest server</flag>
 	</use>
 	<longdescription lang="en">
