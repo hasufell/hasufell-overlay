@@ -3,9 +3,9 @@
 # $Header: $
 
 EAPI=4
-inherit eutils cmake-utils gnome2-utils vcs-snapshot games
+inherit eutils cmake-utils gnome2-utils vcs-snapshot user games
 
-DESCRIPTION="An InfiniMiner/Minecraft inspired game."
+DESCRIPTION="An InfiniMiner/Minecraft inspired game"
 HOMEPAGE="http://c55.me/minetest/"
 SRC_URI="http://github.com/celeron55/minetest/tarball/${PV} -> ${P}.tar.gz"
 
@@ -35,6 +35,14 @@ DEPEND="${RDEPEND}
 	>=dev-games/irrlicht-1.7
 	nls? ( sys-devel/gettext )"
 
+pkg_setup() {
+	games_pkg_setup
+
+	if use server || use dedicated ; then
+		enewuser ${PN} -1 -1 /var/lib/${PN} ${GAMES_GROUP}
+	fi
+}
+
 src_unpack() {
 	vcs-snapshot_src_unpack
 }
@@ -45,6 +53,12 @@ src_prepare() {
 		"${FILESDIR}"/${P}-lua.patch
 
 	rm -r src/{jthread,lua,sqlite} || die
+
+	# set paths
+	sed \
+		-e "s#@BINDIR@#${GAMES_BINDIR}#g" \
+		-e "s#@GROUP@#${GAMES_GROUP}#g" \
+		"${FILESDIR}"/minetestserver.confd > "${T}"/minetestserver.confd || die
 }
 
 src_configure() {
@@ -66,16 +80,18 @@ src_compile() {
 
 src_install() {
 	cmake-utils_src_install
+
+	if use server || use dedicated ; then
+		newinitd "${FILESDIR}"/minetestserver.initd minetest-server
+		newconfd "${T}"/minetestserver.confd minetest-server
+	fi
+
 	prepgamesdirs
 }
 
 pkg_preinst() {
 	games_pkg_preinst
 	gnome2_icon_savelist
-
-	enewgroup minetest
-	enewuser minetest -1 -1 /var/lib/minetest "minetest,games"
-	doinitd "${FILESDIR}/minetestserver.init"
 }
 
 pkg_postinst() {
@@ -83,8 +99,18 @@ pkg_postinst() {
 	gnome2_icon_cache_update
 
 	if ! use dedicated ; then
+		elog
 		elog "optional dependencies:"
 		elog "	games-action/minetest_game (official mod)"
+		elog
+	fi
+
+	if use server || use dedicated ; then
+		elog
+		elog "Configure your server via /etc/conf.d/minetest-server"
+		elog "The user \"minetest\" is created with /var/lib/${PN} homedir."
+		elog "Default logfile is ~/minetest-server.log"
+		elog
 	fi
 }
 
