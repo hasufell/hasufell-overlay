@@ -24,7 +24,6 @@ RDEPEND="dev-db/sqlite:3
 		media-libs/libpng:0
 		media-libs/libvorbis
 		media-libs/openal
-		virtual/glu
 		virtual/jpeg
 		virtual/opengl
 		x11-libs/libX11
