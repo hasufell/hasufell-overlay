@@ -3,9 +3,9 @@
 # $Header: $
 
 EAPI=4
-inherit eutils cmake-utils git-2 gnome2-utils vcs-snapshot games
+inherit eutils cmake-utils git-2 gnome2-utils vcs-snapshot user games
 
-DESCRIPTION="Building single/multiplayer game similar to Minecraft"
+DESCRIPTION="An InfiniMiner/Minecraft inspired game"
 HOMEPAGE="http://c55.me/minetest/"
 GIT_REPO_URI="git://github.com/celeron55/${PN}.git"
 
@@ -33,8 +33,24 @@ DEPEND="${RDEPEND}
 	>=dev-games/irrlicht-1.7
 	nls? ( sys-devel/gettext )"
 
+pkg_setup() {
+	games_pkg_setup
+
+	if use server || use dedicated ; then
+		enewuser ${PN} -1 -1 /var/lib/${PN} ${GAMES_GROUP}
+	fi
+}
+
 src_unpack() {
 	git-2_src_unpack
+}
+
+src_prepare() {
+	# set paths
+	sed \
+		-e "s#@BINDIR@#${GAMES_BINDIR}#g" \
+		-e "s#@GROUP@#${GAMES_GROUP}#g" \
+		"${FILESDIR}"/minetestserver.confd > "${T}"/minetestserver.confd || die
 }
 
 src_configure() {
@@ -56,6 +72,12 @@ src_compile() {
 
 src_install() {
 	cmake-utils_src_install
+
+	if use server || use dedicated ; then
+		newinitd "${FILESDIR}"/minetestserver.initd minetest-server
+		newconfd "${T}"/minetestserver.confd minetest-server
+	fi
+
 	prepgamesdirs
 }
 
@@ -69,10 +91,18 @@ pkg_postinst() {
 	gnome2_icon_cache_update
 
 	if ! use dedicated ; then
-		echo
+		elog
 		elog "optional dependencies:"
 		elog "	games-action/minetest_game (official mod)"
-		echo
+		elog
+	fi
+
+	if use server || use dedicated ; then
+		elog
+		elog "Configure your server via /etc/conf.d/minetest-server"
+		elog "The user \"minetest\" is created with /var/lib/${PN} homedir."
+		elog "Default logfile is ~/minetest-server.log"
+		elog
 	fi
 }
 
