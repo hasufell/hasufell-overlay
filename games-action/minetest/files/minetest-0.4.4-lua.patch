@@ -1,0 +1,24 @@
+--- src/CMakeLists.txt
++++ src/CMakeLists.txt
+@@ -142,10 +142,7 @@
+ find_package(Jthread REQUIRED)
+ find_package(Sqlite3 REQUIRED)
+ 
+-# Do not use system-wide installation of Lua, because it'll likely be a
+-# different version and/or has different build options.
+-set(LUA_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lua/src")
+-set(LUA_LIBRARY "lua")
++find_package(Lua51 REQUIRED)
+ 
+ configure_file(
+ 	"${PROJECT_SOURCE_DIR}/cmake_config.h.in"
+@@ -480,9 +477,4 @@
+ 	add_subdirectory(sqlite)
+ endif (SQLITE3_FOUND)
+ 
+-if (LUA_FOUND)
+-else (LUA_FOUND)
+-	add_subdirectory(lua)
+-endif (LUA_FOUND)
+-
+ #end
