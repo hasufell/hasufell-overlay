@@ -12,12 +12,14 @@ SRC_URI="http://github.com/celeron55/minetest/tarball/${PV} -> ${P}.tar.gz"
 LICENSE="LGPL-2.1+ CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="dedicated nls +server"
+IUSE="bundled-libs dedicated nls +server"
 
 RDEPEND="dev-db/sqlite:3
-	dev-lang/lua
-	>=dev-libs/jthread-1.2
 	sys-libs/zlib
+	!bundled-libs? (
+		dev-lang/lua
+		<dev-libs/jthread-1.3
+	)
 	!dedicated? (
 		app-arch/bzip2
 		media-libs/libogg
@@ -32,7 +34,7 @@ RDEPEND="dev-db/sqlite:3
 	nls? ( virtual/libintl )"
 # XXX: support shared lib for irrlicht
 DEPEND="${RDEPEND}
-	>=dev-games/irrlicht-1.7
+	<dev-games/irrlicht-1.8
 	nls? ( sys-devel/gettext )"
 
 pkg_setup() {
@@ -48,11 +50,13 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch \
-		"${FILESDIR}"/${P}-jthread.patch \
-		"${FILESDIR}"/${P}-lua.patch
+	if ! use bundled-libs ; then
+		epatch \
+			"${FILESDIR}"/${P}-jthread.patch \
+			"${FILESDIR}"/${P}-lua.patch
 
-	rm -r src/{jthread,lua,sqlite} || die
+		rm -r src/{jthread,lua,sqlite} || die
+	fi
 
 	# set paths
 	sed \

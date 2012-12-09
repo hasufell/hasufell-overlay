@@ -30,7 +30,7 @@ RDEPEND="dev-db/sqlite:3
 	nls? ( virtual/libintl )"
 # XXX: support shared lib for irrlicht
 DEPEND="${RDEPEND}
-	>=dev-games/irrlicht-1.7
+	<dev-games/irrlicht-1.8
 	nls? ( sys-devel/gettext )"
 
 pkg_setup() {
