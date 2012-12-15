@@ -34,11 +34,11 @@ RDEPEND="
 	virtual/jpeg
 	virtual/opengl
 	x11-libs/libX11
+	x11-libs/libXcursor
 	audio? ( media-libs/libogg
 		media-libs/libvorbis
 		media-libs/openal )
-	editor? ( x11-libs/wxGTK:${WX_GTK_VER}[X,opengl] )
-	fam? ( virtual/fam )"
+	editor? ( x11-libs/wxGTK:${WX_GTK_VER}[X,opengl] )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	test? ( dev-lang/perl )"
@@ -65,7 +65,6 @@ src_configure() {
 		--with-system-nvtt \
 		--with-system-enet \
 		--with-system-mozjs185 \
-		$(usex fam "" "--without-fam") \
 		$(usex pch "" "--without-pch") \
 		$(usex test "" "--without-tests") \
 		$(usex audio "" "--without-audio") \
