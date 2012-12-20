@@ -8,7 +8,7 @@ inherit eutils gnome2-utils cmake-utils games
 
 DESCRIPTION="An open source reimplementation of TES III: Morrowind"
 HOMEPAGE="http://openmw.org/"
-SRC_URI="http://launchpad.net/~${PN}/+archive/${PN}/+files/${PN}_${PV}.orig.tar.bz2"
+SRC_URI="http://openmw.googlecode.com/files/openmw_${PV}.orig.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
