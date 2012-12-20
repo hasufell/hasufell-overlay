@@ -83,6 +83,11 @@ pkg_preinst() {
 pkg_postinst() {
 	games_pkg_postinst
 	gnome2_icon_cache_update
+
+	ewarn
+	ewarn "If you have your data files on an NTFS partition"
+	ewarn "openmw might be very slow or even unable to load the data!"
+	ewarn
 }
 
 pkg_postrm() {
