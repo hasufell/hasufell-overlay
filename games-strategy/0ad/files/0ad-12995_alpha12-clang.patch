@@ -1,0 +1,10 @@
+http://trac.wildfiregames.com/changeset/13031
+--- source/lib/debug.h
++++ source/lib/debug.h
+@@ -123,5 +123,5 @@
+  * use 0 as the initial value to avoid allocating .rdata space.
+  **/
+-const atomic_bool DEBUG_SUPPRESS = 0xAB;
++static const atomic_bool DEBUG_SUPPRESS = 0xAB;
+ 
+ /**

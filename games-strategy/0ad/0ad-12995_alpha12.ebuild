@@ -43,7 +43,8 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${MY_P}
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-gentoo.patch
+	epatch "${FILESDIR}"/${P}-gentoo.patch \
+		"${FILESDIR}"/${P}-clang.patch
 }
 
 src_configure() {
