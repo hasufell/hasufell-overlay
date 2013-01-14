@@ -9,7 +9,7 @@ WX_GTK_VER="2.8"
 inherit eutils wxwidgets toolchain-funcs games
 
 MY_P=0ad-0.0.12-alpha
-DESCRIPTION="A free, real-time strategy game"
+DESCRIPTION="A free, real-time strategy game of ancient warfare"
 HOMEPAGE="http://wildfiregames.com/0ad/"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-build.tar.xz"
 
@@ -108,7 +108,7 @@ src_install() {
 	dodoc binaries/system/readme.txt
 	doicon build/resources/${PN}.png
 	games_make_wrapper ${PN} "${GAMES_BINDIR}/pyrogenesis"
-	make_desktop_entry ${PN}
+	make_desktop_entry ${PN} "0 A.D."
 
 	prepgamesdirs
 }
