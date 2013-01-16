@@ -8,7 +8,7 @@ inherit eutils wxwidgets games
 
 DESCRIPTION="Zod engine is a remake of the 1996 classic game by Bitmap Brothers called Z"
 HOMEPAGE="http://zod.sourceforge.net/"
-SRC_URI=""
+SRC_URI="zod_linux-2011-09-06.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}"
 S=${WORKDIR}/zod_engine
 
 pkg_nofetch() {
-	einfo "Please download zod_linux-2011-09-06.tar.gz from:"
+	einfo "Please download ${SRC_URI} from:"
 	einfo "http://sourceforge.net/projects/zod/files/linux_releases/"
 	einfo "and move it to ${DISTDIR}"
 	echo
