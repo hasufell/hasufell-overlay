@@ -12,7 +12,7 @@ MY_PV="r${PV%_*}-alpha"
 MY_P=${PN}-${MY_PV}
 
 DESCRIPTION="A free, real-time strategy game of ancient warfare"
-HOMEPAGE="http://wildfiregames.com/0ad/"
+HOMEPAGE="http://play0ad.com/"
 ESVN_REPO_URI="http://svn.wildfiregames.com/public/ps/trunk"
 
 LICENSE="GPL-2 LGPL-2.1 MIT CCPL-Attribution-ShareAlike-3.0 as-is"

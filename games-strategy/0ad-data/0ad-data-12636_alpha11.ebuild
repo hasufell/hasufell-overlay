@@ -8,7 +8,7 @@ inherit games
 
 MY_P=0ad-0.0.11-alpha
 DESCRIPTION="Data files for 0ad"
-HOMEPAGE="http://wildfiregames.com/0ad/"
+HOMEPAGE="http://play0ad.com/"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-data.tar.xz"
 
 LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0 LPPL-1.3c BitstreamVera"

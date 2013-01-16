@@ -10,7 +10,7 @@ inherit eutils wxwidgets toolchain-funcs games
 
 MY_P=0ad-0.0.12-alpha
 DESCRIPTION="A free, real-time strategy game"
-HOMEPAGE="http://wildfiregames.com/0ad/"
+HOMEPAGE="http://play0ad.com/"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-build.tar.xz"
 
 LICENSE="GPL-2 LGPL-2.1 MIT CCPL-Attribution-ShareAlike-3.0 as-is"
