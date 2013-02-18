@@ -100,6 +100,7 @@ src_configure() {
 	# QA and package specific optimization
 	append-cflags -ffast-math -fno-strict-aliasing
 	append-cxxflags -ffast-math -fno-strict-aliasing
+	append-cppflags -D__extern_always_inline=inline
 
 	# theora requires vorbis
 	local mycmakeargs=(
