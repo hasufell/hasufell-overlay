@@ -1,0 +1,14 @@
+From: Julian Ospald <hasufell@gentoo.org>
+Date: Thu Feb 21 18:07:25 UTC 2013
+Subject: add install rule for opencs
+
+--- openmw-0.21.0/CMakeLists.txt
++++ openmw-0.21.0/CMakeLists.txt
+@@ -660,6 +660,7 @@
+     INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/omwlauncher" DESTINATION "${BINDIR}" )
+     INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/esmtool" DESTINATION "${BINDIR}" )
+     INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/mwiniimport" DESTINATION "${BINDIR}" )
++    INSTALL(PROGRAMS "${OpenMW_BINARY_DIR}/opencs" DESTINATION "${BINDIR}" )
+ 
+     # Install icon and .desktop
+     INSTALL(FILES "${OpenMW_SOURCE_DIR}/apps/launcher/resources/images/openmw.png" DESTINATION "${ICONDIR}")

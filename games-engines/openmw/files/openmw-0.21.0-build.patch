@@ -1,0 +1,34 @@
+From: Julian Ospald <hasufell@gentoo.org>
+Date: Thu Feb 21 17:51:26 UTC 2013
+Subject: fix compilation
+
+http://bugs.openmw.org/issues/576
+
+--- openmw-0.21.0/components/nif/nif_file.cpp
++++ openmw-0.21.0/components/nif/nif_file.cpp
+@@ -36,8 +36,8 @@
+ #include <iostream>
+ 
+ //TODO: when threading is needed, enable these
+-//#include <boost/mutex.hpp>
+-//#include <boost/thread/locks.hpp>
++//#include <boost/thread/mutex.hpp>
++#include <boost/thread/locks.hpp>
+ 
+ namespace Nif
+ {
+--- openmw-0.21.0/components/bsa/bsa_file.cpp
++++ openmw-0.21.0/components/bsa/bsa_file.cpp
+@@ -23,9 +23,9 @@
+ 
+ #include "bsa_file.hpp"
+ 
+-//#include <stdexcept>
+-//#include <cstdlib>
+-//#include <cassert>
++#include <stdexcept>
++#include <cstdlib>
++#include <cassert>
+ 
+ #include "../files/constrainedfiledatastream.hpp"
+ 
