@@ -23,9 +23,9 @@ RDEPEND=">=dev-games/mygui-3.2.0
 	media-libs/freetype:2
 	media-libs/openal
 	>=sci-physics/bullet-2.80
-	>=x11-libs/qt-core-4.7.0:4
-	>=x11-libs/qt-gui-4.7.0:4
-	devtools? ( x11-libs/qt-xmlpatterns:4 )
+	>=dev-qt/qtcore-4.7.0:4
+	>=dev-qt/qtgui-4.7.0:4
+	devtools? ( dev-qt/qtxmlpatterns:4 )
 	ffmpeg? ( media-video/ffmpeg )
 	mpg123? ( media-libs/libsndfile
 		media-sound/mpg123 )"
