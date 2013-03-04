@@ -47,6 +47,7 @@ src_install() {
 	newicon icon/sword.png ${PN}.png || die
 	make_desktop_entry ${PN} ${PN} ${PN}
 	dodoc NEWS README INSTALL AUTHORS || die
+	prepgamesdirs
 }
 
 pkg_postinst() {
