@@ -27,8 +27,7 @@ CMAKE_IN_SOURCE_BUILD=1
 
 src_prepare() {
 	sed \
-		-e "/freesynd_data_dir/s#/usr/share#${GAMES_DATADIR}#" \
-		-e "/freesynd_data_dir/s/#//" \
+		-e "s:#freesynd_data_dir = /usr/share/freesynd/data:freesynd_data_dir = ${GAMES_DATADIR}/${PN}/data:" \
 		-i ${PN}.ini || die
 }
 
