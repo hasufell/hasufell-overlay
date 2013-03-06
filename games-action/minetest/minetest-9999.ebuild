@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 inherit eutils cmake-utils git-2 gnome2-utils vcs-snapshot user games
 
 DESCRIPTION="An InfiniMiner/Minecraft inspired game"
@@ -11,26 +11,30 @@ EGIT_REPO_URI="git://github.com/celeron55/${PN}.git"
 
 LICENSE="LGPL-2.1+ CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
-KEYWORDS=""
-IUSE="dedicated nls +server"
+KEYWORDS="~"
+IUSE="+curl dedicated nls +server +sound +truetype"
 
 RDEPEND="dev-db/sqlite:3
+	>=dev-games/irrlicht-1.8-r2
+	>=dev-lang/lua-5.1.4
 	sys-libs/zlib
+	curl? ( net-misc/curl )
 	!dedicated? (
 		app-arch/bzip2
-		media-libs/libogg
 		media-libs/libpng:0
-		media-libs/libvorbis
-		media-libs/openal
 		virtual/jpeg
 		virtual/opengl
 		x11-libs/libX11
 		x11-libs/libXxf86vm
+		sound? (
+			media-libs/libogg
+			media-libs/libvorbis
+			media-libs/openal
+		)
+		truetype? ( media-libs/freetype:2 )
 	)
 	nls? ( virtual/libintl )"
-# XXX: support shared lib for irrlicht
 DEPEND="${RDEPEND}
-	<dev-games/irrlicht-1.8
 	nls? ( sys-devel/gettext )"
 
 pkg_setup() {
@@ -61,6 +65,9 @@ src_configure() {
 		-DCUSTOM_DOCDIR="/usr/share/doc/${PF}"
 		$(usex dedicated "-DBUILD_SERVER=ON -DBUILD_CLIENT=OFF" "$(cmake-utils_use_build server SERVER) -DBUILD_CLIENT=ON")
 		$(cmake-utils_use_enable nls GETTEXT)
+		$(cmake-utils_use_enable curl CURL)
+		$(cmake-utils_use_enable truetype FREETYPE)
+		$(cmake-utils_use_enable sound SOUND)
 		)
 
 	cmake-utils_src_configure

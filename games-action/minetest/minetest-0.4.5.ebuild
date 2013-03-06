@@ -1,40 +1,40 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 inherit eutils cmake-utils gnome2-utils vcs-snapshot user games
 
 DESCRIPTION="An InfiniMiner/Minecraft inspired game"
 HOMEPAGE="http://c55.me/minetest/"
-SRC_URI="http://github.com/celeron55/minetest/tarball/${PV} -> ${P}.tar.gz"
+SRC_URI="http://github.com/minetest/minetest/tarball/${PV} -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1+ CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="bundled-libs dedicated nls +server"
+IUSE="+curl dedicated nls +server +sound +truetype"
 
 RDEPEND="dev-db/sqlite:3
+	>=dev-games/irrlicht-1.8-r2
+	>=dev-lang/lua-5.1.4
 	sys-libs/zlib
-	!bundled-libs? (
-		dev-lang/lua
-		<dev-libs/jthread-1.3
-	)
+	curl? ( net-misc/curl )
 	!dedicated? (
 		app-arch/bzip2
-		media-libs/libogg
 		media-libs/libpng:0
-		media-libs/libvorbis
-		media-libs/openal
 		virtual/jpeg
 		virtual/opengl
 		x11-libs/libX11
 		x11-libs/libXxf86vm
+		sound? (
+			media-libs/libogg
+			media-libs/libvorbis
+			media-libs/openal
+		)
+		truetype? ( media-libs/freetype:2 )
 	)
 	nls? ( virtual/libintl )"
-# XXX: support shared lib for irrlicht
 DEPEND="${RDEPEND}
-	<dev-games/irrlicht-1.8
 	nls? ( sys-devel/gettext )"
 
 pkg_setup() {
@@ -50,13 +50,13 @@ src_unpack() {
 }
 
 src_prepare() {
-	if ! use bundled-libs ; then
-		epatch \
-			"${FILESDIR}"/${P}-jthread.patch \
-			"${FILESDIR}"/${P}-lua.patch
+	epatch \
+		"${FILESDIR}"/${P}-cmake.patch \
+		"${FILESDIR}"/${P}-unbundle.patch
 
-		rm -r src/{jthread,lua,sqlite} || die
-	fi
+	# jthread is modified
+	# json is modified
+	rm -r src/{lua,sqlite} || die
 
 	# set paths
 	sed \
@@ -73,6 +73,10 @@ src_configure() {
 		-DCUSTOM_DOCDIR="/usr/share/doc/${PF}"
 		$(usex dedicated "-DBUILD_SERVER=ON -DBUILD_CLIENT=OFF" "$(cmake-utils_use_build server SERVER) -DBUILD_CLIENT=ON")
 		$(cmake-utils_use_enable nls GETTEXT)
+		$(cmake-utils_use_enable curl CURL)
+		$(cmake-utils_use_enable truetype FREETYPE)
+		$(cmake-utils_use_enable sound SOUND)
+		-DWITH_SYSTEM_JTHREAD=OFF
 		)
 
 	cmake-utils_src_configure
