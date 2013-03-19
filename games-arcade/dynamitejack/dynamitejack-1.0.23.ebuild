@@ -23,7 +23,6 @@ QA_PREBUILT="${MYGAMEDIR#/}/bin/*"
 
 # linked to pulseaudio
 RDEPEND="
-	virtual/glu
 	virtual/opengl
 	amd64? (
 		app-emulation/emul-linux-x86-opengl
@@ -39,6 +38,7 @@ RDEPEND="
 		media-libs/libsndfile
 		media-libs/libvorbis
 		media-sound/pulseaudio
+		virtual/glu
 		x11-libs/libICE
 		x11-libs/libSM
 		x11-libs/libX11
