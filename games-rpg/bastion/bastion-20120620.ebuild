@@ -67,7 +67,7 @@ pkg_nofetch() {
 }
 
 src_unpack() {
-	myarch=$(usex amd64 "x86" "x86_64")
+	local myarch=$(usex amd64 "x86" "x86_64")
 
 	unpack_makeself
 
