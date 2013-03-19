@@ -35,14 +35,11 @@ RDEPEND="
 	x11-libs/libXxf86vm
 	!bundled-libs? (
 		media-libs/freeglut
-		~media-libs/glew-1.6.0
 		media-libs/libogg
 		media-libs/libvorbis
 		media-libs/openal
 	)
-	!bundled-glew? (
-		~media-libs/glew-1.6.0
-	)"
+	!bundled-glew? ( ~media-libs/glew-1.6.0 )"
 
 S=${WORKDIR}/data
 
