@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-# TODO: unbundle mono when multilib
+# TODO: - unbundle mono when multilib
+#       - unbundle fmodex when multilib
 
 EAPI=5
 
@@ -83,8 +84,8 @@ src_unpack() {
 src_prepare() {
 	if ! use bundled-libs ; then
 		einfo "Removing bundles libs..."
-		rm -v lib/libfmodex.so* lib/libSDL-1.2.so* || die
-		use x86 && { rm -v lib/libmono-2.0.so* || die ;}
+		rm -v lib/libSDL-1.2.so* || die
+		use x86 && { rm -v lib/libmono-2.0.so* lib/libfmodex.so* || die ;}
 	fi
 }
 
