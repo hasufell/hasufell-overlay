@@ -85,6 +85,9 @@ src_install() {
 	dodir "${MYGAMEDIR}"
 	mv -v Engine UDKGame "${D}${MYGAMEDIR}" || die
 
+	# use system xdg-open script, location is hardcoded
+	dosym /usr/bin/xdg-open "${MYGAMEDIR}"/UDKGame/Binaries/xdg-open
+
 	newicon -s 48 DunDefIcon.png ${PN}.png
 	make_desktop_entry "${PN}" "Dungeon Defenders"
 	games_make_wrapper ${PN} "./${MY_PN}-x86" "${MYGAMEDIR}/UDKGame/Binaries"
