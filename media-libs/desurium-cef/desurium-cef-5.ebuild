@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -18,9 +18,9 @@ MY_P="Desurium-${DESURIUM_VERSION}"
 DESCRIPTION="Highly patched CEF by desurium"
 HOMEPAGE="https://github.com/lodle/Desurium"
 SRC_URI="https://github.com/lodle/Desurium/archive/${PV}.tar.gz -> ${MY_P}.tar.gz
-	https://github.com/downloads/lodle/Desurium/${CEF_ARC}
+	mirror://github/lodle/Desurium/${CEF_ARC}
 	http://commondatastorage.googleapis.com/chromium-browser-official/${CHROMIUM_ARC}
-	https://github.com/downloads/lodle/Desurium/${DEPOT_TOOLS_ARC}"
+	mirror://github/lodle/Desurium/${DEPOT_TOOLS_ARC}"
 
 EGIT_REPO_URI="git://github.com/lodle/Desurium.git"
 EGIT_NOUNPACK="true"

@@ -1,10 +1,10 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=5
 
-inherit autotools eutils games
+inherit eutils games
 
 DESCRIPTION="P.E.Op.S Sound Emulation (SPU) PSEmu Plugin"
 HOMEPAGE="http://sourceforge.net/projects/peops/"
@@ -14,6 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="alsa oss"
+REQUIRED_USE="|| ( alsa oss )"
 
 DEPEND="alsa? ( media-libs/alsa-lib )
 	x86? ( x11-libs/gtk+:1 )
@@ -21,28 +22,18 @@ DEPEND="alsa? ( media-libs/alsa-lib )
 RDEPEND="${DEPEND}
 	amd64? ( app-emulation/emul-linux-x86-gtklibs )"
 
-QA_PREBUILT="$(games_get_libdir)/psemu/cfg/cfgPeopsOSS"
+QA_PREBUILT="${GAMES_PREFIX}/lib32/psemu/cfg/cfgPeopsOSS
+	${GAMES_PREFIX}/lib64/psemu/cfg/cfgPeopsOSS"
 
 S="${WORKDIR}"/src
 
-pkg_setup() {
-	if use !alsa && use !oss ; then
-		die "must select oss or alsa"
-	fi
-	games_pkg_setup
-}
-
-src_unpack() {
-	default
-	cd src
+src_compile() {
 	epatch "${FILESDIR}"/makefile.patch
 
 	if use amd64 ; then
 		sed -i -e "s:-L/usr/lib:-L/usr/lib32:" Makefile
 	fi
-}
 
-src_compile() {
 	if use oss ; then
 		emake USEALSA=FALSE || die "oss build failed"
 	fi

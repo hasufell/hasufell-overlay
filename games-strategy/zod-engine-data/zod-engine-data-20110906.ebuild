@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -7,7 +7,7 @@ inherit games
 
 MY_P=zod_linux-${PV:0:4}-${PV:4:2}-${PV:6:2}
 DESCRIPTION="Zod engine data files"
-HOMEPAGE=""
+HOMEPAGE="http://zod.sourceforge.net/"
 SRC_URI="${MY_P}.tar.gz"
 
 LICENSE="all-rights-reserved"

@@ -18,7 +18,6 @@
 	</longdescription>
 	<use>
 		<flag name="cpuinfo">Use CPUInfo (if compilation fails, then disable this)</flag>
-		<flag name="client">Build Daemon client</flag>
 		<flag name="daemonmap">Build Mapping tool</flag>
 		<flag name="glsl">Compile with GLSL Optimizer</flag>
 		<flag name="mumble">Compile with support for Mumble</flag>

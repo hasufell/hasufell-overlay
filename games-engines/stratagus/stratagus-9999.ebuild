@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -25,7 +25,7 @@ RDEPEND="dev-db/sqlite:3
 	bzip2? ( app-arch/bzip2 )
 	mikmod? ( media-libs/libmikmod )
 	mng? ( media-libs/libmng )
-	vorbis? ( media-libs/libvorbis 
+	vorbis? ( media-libs/libvorbis
 		theora? ( media-libs/libtheora )
 	)"
 DEPEND="${RDEPEND}

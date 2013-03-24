@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -13,7 +13,7 @@ HOMEPAGE="http://unvanquished.net/"
 SRC_URI="https://github.com/${MY_PN}/${MY_PN}/tarball/v${PV}
 	-> ${P}.tar.gz"
 
-LICENSE="GPL-3 CCPL-Attribution-ShareAlike-2.5 CCPL-Attribution-ShareAlike-3.0 as-is"
+LICENSE="GPL-3 CC-BY-SA-2.5 CC-BY-SA-3.0 as-is"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+cpuinfo daemonmap debug dedicated +glsl mumble ncurses mysql openal +server theora +voip vorbis +webp xvid"

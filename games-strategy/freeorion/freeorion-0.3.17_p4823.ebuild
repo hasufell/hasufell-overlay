@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -14,7 +14,7 @@ ESVN_REPO_URI="https://${PN}.svn.sourceforge.net/svnroot/${PN}/trunk"
 ESVN_PROJECT="${PN}"
 ESVN_REVISION="${PV#*_p}"
 
-LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0"
+LICENSE="GPL-2 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="" # dependency gigi unkeyworded and potentially broken
 IUSE="cg"
@@ -32,7 +32,7 @@ RDEPEND="
 	sys-libs/zlib
 	virtual/opengl"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 CMAKE_USE_DIR="${S}"/FreeOrion
 CMAKE_VERBOSE="1"

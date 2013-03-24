@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -14,7 +14,7 @@ DESCRIPTION="a multi-player, 3D action role-playing game"
 HOMEPAGE="http://sumwars.org"
 SRC_URI=""
 
-LICENSE="GPL-3 CCPL-Attribution-ShareAlike-3.0"
+LICENSE="GPL-3 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS=""
 IUSE="+tools debug"

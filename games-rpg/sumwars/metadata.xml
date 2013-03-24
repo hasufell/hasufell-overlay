@@ -5,7 +5,6 @@
 		<email>maintainer-wanted@gentoo.org</email>
 	</maintainer>
 	<use>
-		<flag name='stl'>Compile with TIXML_USE_STL support in <pkg>dev-libs/tinyxml</pkg>.</flag>
 		<flag name="tools">Compile with additional game tools like content editor.</flag>
 	</use>
 </pkgmetadata>

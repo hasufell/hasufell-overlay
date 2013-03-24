@@ -9,7 +9,7 @@ DESCRIPTION="An InfiniMiner/Minecraft inspired game"
 HOMEPAGE="http://c55.me/minetest/"
 SRC_URI="http://github.com/minetest/minetest/tarball/${PV} -> ${P}.tar.gz"
 
-LICENSE="LGPL-2.1+ CCPL-Attribution-ShareAlike-3.0"
+LICENSE="LGPL-2.1+ CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+curl dedicated nls +server +sound +truetype"

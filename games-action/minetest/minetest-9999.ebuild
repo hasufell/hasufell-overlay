@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -9,9 +9,9 @@ DESCRIPTION="An InfiniMiner/Minecraft inspired game"
 HOMEPAGE="http://c55.me/minetest/"
 EGIT_REPO_URI="git://github.com/celeron55/${PN}.git"
 
-LICENSE="LGPL-2.1+ CCPL-Attribution-ShareAlike-3.0"
+LICENSE="LGPL-2.1+ CC-BY-SA-3.0"
 SLOT="0"
-KEYWORDS="~"
+KEYWORDS=""
 IUSE="+curl dedicated nls +server +sound +truetype"
 
 RDEPEND="dev-db/sqlite:3

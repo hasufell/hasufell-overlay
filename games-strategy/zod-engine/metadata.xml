@@ -5,6 +5,10 @@
 		<email>hasufell@gentoo.org</email>
 		<name>Julian Ospald</name>
 	</maintainer>
+	<use>
+		<flag name='editor'>Build the map editor</flag>
+		<flag name='launcher'>Build the game launcher</flag>
+	</use>
 	<longdescription lang="en">
 		The Zod Engine is an open source remake of the 1996 game Z by the
 		Bitmap Brothers written in C++ using the SDL library for

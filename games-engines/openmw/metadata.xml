@@ -6,6 +6,7 @@
 		<name>Julian Ospald</name>
 	</maintainer>
 	<use>
+		<flag name="devtools">Build development tools</flag>
 		<flag name="ffmpeg">use ffmpeg for sound</flag>
 		<flag name="mpg123">use mpg123 + libsndfile for sound</flag>
 	</use>

@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -13,7 +13,7 @@ HOMEPAGE="http://opendungeons.sourceforge.net"
 EGIT_REPO_URI="git://${PN}.git.sourceforge.net/gitroot/${PN}/${PN}"
 EGIT_BRANCH="development"
 
-LICENSE="GPL-3 CCPL-Attribution-ShareAlike-3.0"
+LICENSE="GPL-3 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS=""
 IUSE=""
@@ -37,7 +37,7 @@ RDEPEND=">=dev-games/cegui-0.7.0[ogre,opengl]
 	media-libs/openal
 	virtual/opengl"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 CMAKE_IN_SOURCE_BUILD=1
 

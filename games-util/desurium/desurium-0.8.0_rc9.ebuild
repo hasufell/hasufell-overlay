@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,8 +17,8 @@ MY_P="Desurium-${PV}"
 DESCRIPTION="Free software version of Desura game client"
 HOMEPAGE="https://github.com/lodle/Desurium"
 SRC_URI="https://github.com/lodle/Desurium/archive/${PV}.tar.gz -> ${MY_P}.tar.gz
-	https://github.com/downloads/lodle/Desurium/${BREAKPAD_ARC}
-	https://github.com/downloads/lodle/Desurium/${CEF_ARC}
+	mirror://github/lodle/Desurium/${BREAKPAD_ARC}
+	mirror://github/downloads/lodle/Desurium/${CEF_ARC}
 	bundled-wxgtk? ( ftp://ftp.wxwidgets.org/pub/2.9.3/${WX_ARC} )"
 
 LICENSE="GPL-3"

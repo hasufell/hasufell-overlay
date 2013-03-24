@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -12,7 +12,7 @@ DESCRIPTION="Datafiles and maps for unvanquished"
 HOMEPAGE="http://unvanquished.net/"
 SRC_URI="mirror://sourceforge/${PN%-data}/${MY_PN}_${PV}.zip"
 
-LICENSE=""
+LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

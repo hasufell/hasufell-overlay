@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -22,7 +22,7 @@ SRC_URI="mirror://sourceforge/${PN%-data}/${MY_PN}_0.5.1.zip -> ${PN}-0.5.1.zip
 	mirror://sourceforge/${PN%-data}/pak7.pk3 -> unv-pak7.pk3
 	mirror://sourceforge/${PN%-data}/pak8.pk3 -> unv-pak8.pk3"
 
-LICENSE=""
+LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
