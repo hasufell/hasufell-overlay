@@ -4,12 +4,11 @@
 
 EAPI=5
 
-inherit eutils cmake-utils games
+inherit cmake-utils games
 
-MY_P="flare_src_v${PV//./}"
 DESCRIPTION="Free/Libre Action Roleplaying game"
 HOMEPAGE="https://github.com/clintbellanger/flare-game"
-SRC_URI="mirror://sourceforge/flare-game/${MY_P}.tar.gz"
+SRC_URI="mirror://sourceforge/flare-game/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -23,14 +22,6 @@ RDEPEND="
 	media-libs/sdl-mixer[vorbis]
 	media-libs/sdl-ttf"
 DEPEND="${RDEPEND}"
-
-S=${WORKDIR}/${MY_P}
-
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-flags.patch \
-		"${FILESDIR}"/${P}-clang.patch \
-		"${FILESDIR}"/${P}-version.patch
-}
 
 src_configure() {
 	local mycmakeargs=(
