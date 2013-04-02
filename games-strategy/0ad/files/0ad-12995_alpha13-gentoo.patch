@@ -64,8 +64,8 @@ fix minimal-flags option:
  
  		if _OPTIONS["bindir"] then
  			defines { "INSTALLED_BINDIR=" .. _OPTIONS["bindir"] }
---- libraries/fcollada/src/Makefile
-+++ libraries/fcollada/src/Makefile
+--- libraries/source/fcollada/src/Makefile
++++ libraries/source/fcollada/src/Makefile
 @@ -9,8 +9,8 @@
  
  CXX ?= g++
