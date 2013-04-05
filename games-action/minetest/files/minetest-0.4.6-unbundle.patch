@@ -1,0 +1,27 @@
+--- src/CMakeLists.txt
++++ src/CMakeLists.txt
+@@ -179,10 +179,8 @@
+ 	set(CGUITTFONT_LIBRARY cguittfont)
+ endif(USE_FREETYPE)
+ 
+-# Do not use system-wide installation of Lua, because it'll likely be a
+-# different version and/or has different build options.
+-set(LUA_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lua/src")
+-set(LUA_LIBRARY "lua")
++# Do not use bundled libraries if system libraries are available
++find_package(Lua51 REQUIRED)
+ 
+ configure_file(
+ 	"${PROJECT_SOURCE_DIR}/cmake_config.h.in"
+@@ -586,11 +584,6 @@
+ 	add_subdirectory(cguittfont)
+ endif (BUILD_CLIENT AND USE_FREETYPE)
+ 
+-if (LUA_FOUND)
+-else (LUA_FOUND)
+-	add_subdirectory(lua)
+-endif (LUA_FOUND)
+-
+ if (JSON_FOUND)
+ else (JSON_FOUND)
+ 	add_subdirectory(json)

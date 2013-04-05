@@ -3,19 +3,20 @@
 # $Header: $
 
 EAPI=5
-inherit eutils cmake-utils git-2 gnome2-utils vcs-snapshot user games
+inherit eutils cmake-utils gnome2-utils vcs-snapshot user games
 
 DESCRIPTION="An InfiniMiner/Minecraft inspired game"
 HOMEPAGE="http://c55.me/minetest/"
-EGIT_REPO_URI="git://github.com/celeron55/${PN}.git"
+SRC_URI="http://github.com/minetest/minetest/tarball/${PV} -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1+ CC-BY-SA-3.0"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="+curl dedicated nls +server +sound +truetype"
 
 RDEPEND="dev-db/sqlite:3
 	>=dev-games/irrlicht-1.8-r2
+	>=dev-lang/lua-5.1.4
 	sys-libs/zlib
 	curl? ( net-misc/curl )
 	!dedicated? (
@@ -45,10 +46,18 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-2_src_unpack
+	vcs-snapshot_src_unpack
 }
 
 src_prepare() {
+	epatch \
+		"${FILESDIR}"/${P}-cmake.patch \
+		"${FILESDIR}"/${P}-unbundle.patch
+
+	# jthread is modified
+	# json is modified
+	rm -r src/{lua,sqlite} || die
+
 	# set paths
 	sed \
 		-e "s#@BINDIR@#${GAMES_BINDIR}#g" \
@@ -68,6 +77,7 @@ src_configure() {
 		$(cmake-utils_use_enable curl CURL)
 		$(cmake-utils_use_enable truetype FREETYPE)
 		$(cmake-utils_use_enable sound SOUND)
+		-DWITH_SYSTEM_JTHREAD=OFF
 		)
 
 	cmake-utils_src_configure
