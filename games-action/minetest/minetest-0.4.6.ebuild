@@ -54,6 +54,15 @@ src_prepare() {
 		"${FILESDIR}"/${P}-cmake.patch \
 		"${FILESDIR}"/${P}-unbundle.patch
 
+	# correct gettext behavior
+	if [[ -n "${LINGUAS+x}" ]] ; then
+		for i in $(cd po ; echo *) ; do
+			if ! has ${i} ${LINGUAS} ; then
+				rm -r po/${i} || die
+			fi
+		done
+	fi
+
 	# jthread is modified
 	# json is modified
 	rm -r src/{lua,sqlite} || die
