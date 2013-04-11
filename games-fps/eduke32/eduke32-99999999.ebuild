@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -18,16 +18,30 @@ inherit eutils gnome2-utils subversion games
 MY_PV=${PV%.*}
 MY_BUILD=${PV#*.}
 
+# extensions
+MY_HRP=5.2
+MY_SC55=3.0
+MY_OPL=2.0
+MY_XXX=1.33
+
 DESCRIPTION="Port of Duke Nukem 3D for SDL"
 HOMEPAGE="http://www.eduke32.com/ http://hrp.duke4.net/"
-SRC_URI="http://dev.gentoo.org/~hasufell/distfiles/eduke32-icons.tar"
+SRC_URI="http://dukeworld.duke4.net/eduke32/synthesis/${MY_PV}-${MY_BUILD}/${PN}_src_${MY_PV}-${MY_BUILD}.tar.bz2
+	http://dev.gentoo.org/~hasufell/distfiles/eduke32-icons.tar
+	textures? (	http://www.duke4.org/files/nightfright/duke3d_hrp.zip -> duke3d_hrp_${MY_HRP}.zip )
+	sc55-musicpack? ( http://www.duke4.org/files/nightfright/music/duke3d_mus.zip -> duke3d_mus_${MY_SC55}.zip )
+	opl-musicpack? ( http://www.duke4.org/files/nightfright/music/duke3d_musopl.zip -> duke3d_musopl_${MY_OPL}.zip )
+	offensive? ( http://www.duke4.org/files/nightfright/duke3d_xxx.zip -> duke3d_xxx_${MY_XXX}.zip )"
 ESVN_REPO_URI="http://svn.eduke32.com/eduke32/polymer/eduke32"
 
-LICENSE="GPL-2 BUILDLIC"
+LICENSE="GPL-2 BUILDLIC textures? ( hrp_art )"
 SLOT="0"
 KEYWORDS=""
-IUSE="cdinstall debug demo +opengl +png +server tools +vpx"
-REQUIRED_USE="vpx? ( opengl )"
+IUSE="cdinstall debug demo gtk offensive +opengl opl-musicpack +png samples sc55-musicpack +server textures tools +vpx"
+REQUIRED_USE="vpx? ( opengl )
+	textures? ( opengl )
+	offensive? ( textures )
+	?? ( opl-musicpack sc55-musicpack )"
 
 RDEPEND="media-libs/flac
 	media-libs/libogg
@@ -35,20 +49,38 @@ RDEPEND="media-libs/flac
 	media-libs/libvorbis
 	media-libs/sdl-mixer[timidity]
 	sys-libs/zlib
-	x11-libs/gtk+:2
+	gtk? ( x11-libs/gtk+:2 )
 	opengl? ( virtual/glu
 		virtual/opengl )
 	png? ( media-libs/libpng:0
 		sys-libs/zlib )
 	vpx? ( media-libs/libvpx )"
 DEPEND="${RDEPEND}
+	app-arch/unzip
 	x86? ( dev-lang/nasm )"
 PDEPEND="cdinstall? ( games-fps/duke3d-data )
 	demo? ( games-fps/duke3d-demodata )"
 
 src_unpack() {
-	default
+	unpack eduke32-icons.tar
 	subversion_src_unpack
+
+	if use textures; then
+		unzip -q "${DISTDIR}"/duke3d_hrp_${MY_HRP}.zip "hrp_readme.txt" \
+			|| die "unzip hrp readme"
+		if use offensive; then
+			unzip -q "${DISTDIR}"/duke3d_xxx_${MY_XXX}.zip "xxx_readme.txt" \
+				|| die "unzip xxx readme"
+		fi
+	fi
+	if use opl-musicpack; then
+		unzip -q "${DISTDIR}"/duke3d_musopl_${MY_OPL}.zip "readme.txt" \
+			|| die "unzip musopl readme"
+		mv readme.txt musopl_readme.txt || die "mv musopl_readme"
+	elif use sc55-musicpack; then
+		unzip -q "${DISTDIR}"/duke3d_mus_${MY_SC55}.zip "music_readme.txt" \
+			|| die "unzip mus readme"
+	fi
 }
 
 src_prepare() {
@@ -71,7 +103,9 @@ src_prepare() {
 
 src_compile() {
 	local MY_OPTS=(
+		AS=$(type -P nasm)
 		ARCH=
+		SYSARCH=
 		LTO=0
 		PRETTY_OUTPUT=0
 		RELEASE=1
@@ -79,6 +113,7 @@ src_compile() {
 		STRIP=touch
 		LINKED_GTK=1
 		CPLUSPLUS=0
+		$(usex gtk "WITHOUT_GTK=0" "WITHOUT_GTK=1")
 		$(usex debug "DEBUGANYWAY=1" "DEBUGANYWAY=0")
 		$(usex x86 "NOASM=0" "NOASM=1")
 		$(usex server "NETCODE=1" "NETCODE=0")
@@ -95,11 +130,43 @@ src_compile() {
 }
 
 src_install() {
-	dogamesbin ${PN} mapster32
+	local ARGS
+
+	newgamesbin ${PN} ${PN}.bin
+	dogamesbin mapster32
+
+	if use tools; then
+		dobin build/{arttool,bsuite,cacheinfo,generateicon,givedepth,kextract,kgroup,kmd2tool,md2tool,mkpalette,transpal,unpackssi,wad2art,wad2map}
+		dodoc build/doc/*.txt
+	fi
 
 	insinto "${GAMES_DATADIR}/${PN}"
+	# Install optional components
+	if use textures; then
+		newins "${DISTDIR}"/duke3d_hrp_${MY_HRP}.zip duke3d_hrp.zip
+		dodoc "${WORKDIR}"/hrp_readme.txt
+		ARGS+=" -g duke3d_hrp.zip"
+
+		if use offensive; then
+			newins "${DISTDIR}"/duke3d_xxx_${MY_XXX}.zip duke3d_xxx.zip
+			dodoc "${WORKDIR}"/xxx_readme.txt
+			ARGS+=" -g duke3d_xxx.zip"
+		fi
+	fi
+
+	if use opl-musicpack; then
+		newins "${DISTDIR}"/duke3d_musopl_${MY_OPL}.zip duke3d_musopl.zip
+		dodoc "${WORKDIR}"/musopl_readme.txt
+		ARGS+=" -g duke3d_musopl.zip"
+	elif use sc55-musicpack; then
+		newins "${DISTDIR}"/duke3d_mus_${MY_SC55}.zip duke3d_mus.zip
+		dodoc "${WORKDIR}"/music_readme.txt
+		ARGS+=" -g duke3d_mus.zip"
+	fi
+
+	# Install game data
 	doins package/{SEHELP.HLP,STHELP.HLP,m32help.hlp,names.h,tiles.cfg}
-	doins -r package/samples
+	use samples && doins -r package/samples
 
 	local i
 	for i in 16 32 128 256 ; do
@@ -107,20 +174,15 @@ src_install() {
 		newicon -s ${i} "${WORKDIR}"/mapster32_${i}x${i}x32.png mapster32.png
 	done
 
+	games_make_wrapper "${PN}" "${GAMES_BINDIR}/${PN}.bin ${ARGS}"
 	make_desktop_entry ${PN} EDuke32 ${PN}
 	make_desktop_entry mapster32 Mapster32 mapster32
-
-	if use tools; then
-		dobin build/{arttool,bsuite,cacheinfo,generateicon,givedepth,kextract,kgroup,kmd2tool,md2tool,mkpalette,transpal,unpackssi,wad2art,wad2map}
-		dodoc build/doc/*.txt
-	fi
 
 	dodoc build/buildlic.txt
 
 	dodir "${GAMES_LOGDIR}"
 
 	prepgamesdirs
-
 }
 
 pkg_preinst() {
