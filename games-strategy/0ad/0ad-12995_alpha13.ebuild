@@ -8,7 +8,7 @@ WX_GTK_VER="2.8"
 
 inherit eutils wxwidgets toolchain-funcs games
 
-MY_P=0ad-0.0.13-alpha
+MY_P=${PN}-0.0.13-alpha
 DESCRIPTION="A free, real-time strategy game"
 HOMEPAGE="http://wildfiregames.com/0ad/"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-build.tar.xz"
@@ -66,8 +66,8 @@ src_configure() {
 	emake -C "${S}"/build/premake/premake4/build/gmake.unix
 
 	# regenerate scripts.c so our patch applies
-	cd "${S}"/build/premake/premake4 || die
-	"${S}"/build/premake/premake4/bin/release/premake4 embed || die
+	cd "${S}"/build/premake/premake4
+	"${S}"/build/premake/premake4/bin/release/premake4 embed
 
 	# rebuild premake again... this is the most stupid build system
 	emake -C "${S}"/build/premake/premake4/build/gmake.unix clean
@@ -81,7 +81,7 @@ src_configure() {
 		--platform=$(usex amd64 "x64" "x32") \
 		--os=linux \
 		"${myconf[@]}" \
-		gmake || die "Premake failed"
+		gmake
 }
 
 src_compile() {
@@ -93,8 +93,8 @@ src_compile() {
 }
 
 src_test() {
-	cd binaries/system || die
-	./test -libdir "${S}/binaries/system" || die "test phase failed"
+	cd binaries/system
+	./test -libdir "${S}/binaries/system"
 }
 
 src_install() {
