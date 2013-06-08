@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="~games-action/minetest-${PV}[-dedicated]"
+RDEPEND=">=games-action/minetest-${PV}[-dedicated]"
 
 src_install() {
 	insinto "${GAMES_DATADIR}"/minetest/games/common
