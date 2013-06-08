@@ -52,7 +52,8 @@ src_unpack() {
 src_prepare() {
 	epatch \
 		"${FILESDIR}"/${P}-cmake.patch \
-		"${FILESDIR}"/${P}-unbundle.patch
+		"${FILESDIR}"/${P}-unbundle.patch \
+		"${FILESDIR}"/${P}-as-needed.patch
 
 	# correct gettext behavior
 	if [[ -n "${LINGUAS+x}" ]] ; then
