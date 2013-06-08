@@ -6,6 +6,7 @@
 		<name>hasufell</name>
 	</maintainer>
 	<use>
+		<flag name="luajit">Use <pkg>dev-lang/luajit</pkg> instead of <pkg>dev-lang/lua</pkg></flag>
 		<flag name="server">Minetest server</flag>
 	</use>
 	<longdescription lang="en">
