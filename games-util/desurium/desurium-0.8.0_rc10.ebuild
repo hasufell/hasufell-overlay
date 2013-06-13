@@ -15,8 +15,8 @@ WX_ARC="wxWidgets-2.9.3.tar.bz2"
 
 MY_P="Desurium-${PV}"
 DESCRIPTION="Free software version of Desura game client"
-HOMEPAGE="https://github.com/lodle/Desurium"
-SRC_URI="https://github.com/lodle/Desurium/archive/${PV}.tar.gz -> ${MY_P}.tar.gz
+HOMEPAGE="https://github.com/desura/Desurium"
+SRC_URI="https://github.com/desura/Desurium/archive/${PV}.tar.gz -> ${MY_P}.tar.gz
 	mirror://sourceforge/desurium/${BREAKPAD_ARC}
 	mirror://sourceforge/desurium/${CEF_ARC}
 	bundled-wxgtk? ( ftp://ftp.wxwidgets.org/pub/2.9.3/${WX_ARC} )"

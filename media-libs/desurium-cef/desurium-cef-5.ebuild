@@ -16,13 +16,13 @@ DEPOT_TOOLS_ARC="depot_tools-145556-2.tar.gz"
 
 MY_P="Desurium-${DESURIUM_VERSION}"
 DESCRIPTION="Highly patched CEF by desurium"
-HOMEPAGE="https://github.com/lodle/Desurium"
-SRC_URI="https://github.com/lodle/Desurium/archive/${DESURIUM_VERSION}.tar.gz -> ${MY_P}.tar.gz
+HOMEPAGE="https://github.com/desura/Desurium"
+SRC_URI="https://github.com/desura/Desurium/archive/${DESURIUM_VERSION}.tar.gz -> ${MY_P}.tar.gz
 	mirror://sourceforge/desurium/${CEF_ARC}
 	http://commondatastorage.googleapis.com/chromium-browser-official/${CHROMIUM_ARC}
 	mirror://sourceforge/desurium/${DEPOT_TOOLS_ARC}"
 
-EGIT_REPO_URI="git://github.com/lodle/Desurium.git"
+EGIT_REPO_URI="git://github.com/desura/Desurium.git"
 EGIT_NOUNPACK="true"
 
 LICENSE="BSD"

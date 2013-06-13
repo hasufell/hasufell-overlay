@@ -14,9 +14,9 @@ CEF_ARC="cef-291.tar.gz"
 WX_ARC="wxWidgets-2.9.3.tar.bz2"
 
 DESCRIPTION="Free software version of Desura game client"
-HOMEPAGE="https://github.com/lodle/Desurium"
-SRC_URI="mirror://github/lodle/Desurium/${BREAKPAD_ARC}
-	mirror://github/lodle/Desurium/${CEF_ARC}
+HOMEPAGE="https://github.com/desura/Desurium"
+SRC_URI="mirror://sourceforge/desurium/${BREAKPAD_ARC}
+	mirror://sourceforge/desurium/${CEF_ARC}
 	bundled-wxgtk? ( ftp://ftp.wxwidgets.org/pub/2.9.3/${WX_ARC} )"
 
 EGIT_REPO_URI="git://github.com/lodle/Desurium.git"
