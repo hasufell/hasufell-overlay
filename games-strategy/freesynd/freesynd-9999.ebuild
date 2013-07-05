@@ -4,7 +4,7 @@
 
 EAPI=3
 
-inherit cmake-utils eutils subversion games
+inherit cmake-utils eutils games subversion
 
 DESCRIPTION="A cross-platform reimplementation of engine for the classic Bullfrog game, Syndicate"
 HOMEPAGE="http://freesynd.sourceforge.net/"
