@@ -14,7 +14,7 @@ SRC_URI="
 	mirror://sourceforge/${PN%-data}/${PN%-data}-${PV:0:4}-universal.zip
 "
 
-LICENSE="as-is"
+LICENSE="CC-BY-SA-2.5 CC-BY-SA-3.0 CC-BY-NC-SA-3.0 CC-BY-NC-3.0 shaderlab"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
