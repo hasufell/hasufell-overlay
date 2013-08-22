@@ -62,6 +62,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig"
 
+PATCHES=( "${FILESDIR}"/${P}-v8-3.19.18.patch )
+
 S=${WORKDIR}/${MY_P}
 
 pkg_pretend() {
@@ -77,6 +79,10 @@ pkg_pretend() {
 
 src_unpack() {
 	unpack ${MY_P}.tar.gz
+}
+
+src_prepare() {
+	cmake-utils_src_prepare
 }
 
 src_configure() {
