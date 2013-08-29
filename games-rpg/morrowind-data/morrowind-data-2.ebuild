@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -14,6 +14,8 @@ LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
+
+RESTRICT="binchecks"
 
 RDEPEND="games-engines/openmw"
 DEPEND="app-arch/unshield"
@@ -33,8 +35,8 @@ src_unpack() {
 src_install() {
 	insinto "${GAMES_DATADIR}"/${PN}
 	doins -r "${CDROM_ROOT}"/Video
-	doins Data_Files/Morrowind.{esm,bsa}
-	doins -r Music Sound Splash
+	doins App_Executables/Morrowind.ini Data_Files/*
+	doins -r Music Sound Splash Fonts
 
 	prepgamesdirs
 }
