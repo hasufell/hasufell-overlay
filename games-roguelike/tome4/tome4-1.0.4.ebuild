@@ -15,7 +15,8 @@ HOMEPAGE="http://te4.org"
 SRC_URI="music? ( http://te4.org/dl/t-engine/${MY_P}.tar.bz2 )
 	!music? ( http://te4.org/dl/t-engine/${MY_P}-nomusic.tar.bz2 )"
 
-LICENSE="GPL-3 shockbolt-tileset"
+# fonts license: Apache-2.0 BitstreamVera
+LICENSE="GPL-3 shockbolt-tileset Apache-2.0 BitstreamVera"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+jit +music"
