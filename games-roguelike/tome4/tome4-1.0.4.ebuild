@@ -99,7 +99,7 @@ src_install() {
 	# http://forums.te4.org/viewtopic.php?f=42&t=38716
 	games_make_wrapper "${PN}" "./t-engine" "${tome4_home}"
 
-	dodoc CONTRIBUTING COPYING-TILES CREDITS
+	dodoc CONTRIBUTING CREDITS
 
 	insinto "${tome4_home}"
 	doins -r bootstrap game
