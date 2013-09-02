@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit cmake-utils eutils flag-o-matic user gnome2-utils toolchain-funcs games vcs-snapshot
+inherit cmake-utils eutils flag-o-matic user gnome2-utils games vcs-snapshot
 
 MY_PN="Unvanquished"
 
