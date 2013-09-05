@@ -49,9 +49,6 @@ src_prepare() {
 		-e "s~/usr/lib32~/usr/$(get_abi_LIBDIR x86)~" \
 		-e "s~/opt/SDL-2.0~/usr~" \
 	     premake4.lua || die "premake sucks"
-	sed -i \
-		-e "s~/opt/SDL-2.0/lib/~/usr/$(get_libdir)~" \
-	    build/te4core.lua || die "premake sucks"
 }
 
 src_configure() {
