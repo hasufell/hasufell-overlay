@@ -33,9 +33,7 @@ COMMON_DEPEND="
 	>=dev-libs/boost-1.47:=
 	dev-libs/expat
 	dev-libs/openssl:0
-	|| ( <dev-libs/tinyxml-2.6.2-r2[-stl]
-	    >=dev-libs/tinyxml-2.6.2-r2
-	)
+	dev-libs/tinyxml2
 	dev-lang/v8:=
 	|| (
 		net-misc/curl[adns]
