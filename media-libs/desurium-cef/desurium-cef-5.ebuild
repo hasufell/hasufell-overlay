@@ -68,7 +68,8 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-${DESURIUM_VERSION}-chromiumbuild.patch
+	epatch "${FILESDIR}"/${PN}-${DESURIUM_VERSION}-chromiumbuild.patch \
+		"${FILESDIR}"/${P}--nss-3.15.patch
 }
 
 src_configure() {
