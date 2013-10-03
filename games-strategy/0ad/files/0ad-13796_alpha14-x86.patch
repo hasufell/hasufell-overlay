@@ -1,0 +1,69 @@
+fix build on x86 without sse
+
+http://trac.wildfiregames.com/changeset/13934/
+
+Index: /ps/trunk/source/graphics/ModelDef.h
+===================================================================
+--- /ps/trunk/source/graphics/ModelDef.h	(revision 13933)
++++ /ps/trunk/source/graphics/ModelDef.h	(revision 13934)
+@@ -217,5 +217,5 @@
+ 		const CMatrix3D newPoseMatrices[]);
+ 
+-#if ARCH_X86_X64
++#if HAVE_SSE
+ 	/**
+ 	 * SSE-optimised version of SkinPointsAndNormals.
+Index: /ps/trunk/source/graphics/ModelDef.cpp
+===================================================================
+--- /ps/trunk/source/graphics/ModelDef.cpp	(revision 13933)
++++ /ps/trunk/source/graphics/ModelDef.cpp	(revision 13934)
+@@ -27,5 +27,5 @@
+ #include "maths/Vector4D.h"
+ 
+-#if ARCH_X86_X64
++#if HAVE_SSE
+ # include <xmmintrin.h>
+ #endif
+@@ -122,5 +122,5 @@
+ }
+ 
+-#if ARCH_X86_X64
++#if HAVE_SSE
+ void CModelDef::SkinPointsAndNormals_SSE(
+ 		size_t numVertices,
+Index: /ps/trunk/source/graphics/Color.cpp
+===================================================================
+--- /ps/trunk/source/graphics/Color.cpp	(revision 13933)
++++ /ps/trunk/source/graphics/Color.cpp	(revision 13934)
+@@ -27,5 +27,5 @@
+ #include "graphics/SColor.h"
+ 
+-#if ARCH_X86_X64
++#if HAVE_SSE
+ # include <xmmintrin.h>
+ # include "lib/sysdep/arch/x86_x64/x86_x64.h"
+@@ -47,5 +47,5 @@
+ 
+ // Assembler-optimized function for color conversion
+-#if ARCH_X86_X64
++#if HAVE_SSE
+ static SColor4ub sse_ConvertRGBColorTo4ub(const RGBColor& src)
+ {
+@@ -83,5 +83,5 @@
+ 	{
+ 	}
+-#if ARCH_X86_X64
++#if HAVE_SSE
+ 	else if (x86_x64::Cap(x86_x64::CAP_SSE))
+ 	{
+Index: /ps/trunk/source/renderer/ModelRenderer.cpp
+===================================================================
+--- /ps/trunk/source/renderer/ModelRenderer.cpp	(revision 13933)
++++ /ps/trunk/source/renderer/ModelRenderer.cpp	(revision 13934)
+@@ -102,5 +102,5 @@
+ 		}
+ 
+-#if ARCH_X86_X64
++#if HAVE_SSE
+ 		if (g_EnableSSE)
+ 		{

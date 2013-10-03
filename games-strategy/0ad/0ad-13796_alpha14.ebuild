@@ -32,6 +32,7 @@ RDEPEND="
 	virtual/jpeg
 	virtual/opengl
 	x11-libs/libX11
+	x11-libs/libXcursor
 	audio? ( media-libs/libogg
 		media-libs/libvorbis
 		media-libs/openal )
@@ -43,7 +44,8 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${MY_P}
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-gentoo.patch
+	epatch "${FILESDIR}"/${P}-gentoo.patch \
+		"${FILESDIR}"/${P}-x86.patch
 }
 
 src_configure() {
