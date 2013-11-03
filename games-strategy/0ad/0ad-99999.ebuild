@@ -15,7 +15,7 @@ DESCRIPTION="A free, real-time strategy game of ancient warfare"
 HOMEPAGE="http://play0ad.com/"
 ESVN_REPO_URI="http://svn.wildfiregames.com/public/ps/trunk"
 
-LICENSE="GPL-2 LGPL-2.1 MIT CC-BY-SA-3.0 as-is"
+LICENSE="GPL-2 LGPL-2.1 MIT CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS=""
 IUSE="+audio editor fam pch test"
