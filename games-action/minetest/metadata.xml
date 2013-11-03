@@ -34,10 +34,6 @@
 		* Supports multiple languages, translated by the community.
 	</longdescription>
 	<use>
-		<flag name="luajit">
-			Use <pkg>dev-lang/luajit</pkg>
-			instead of <pkg>dev-lang/lua</pkg>
-		</flag>
 		<flag name="server">Build minetest server</flag>
 	</use>
 	<upstream>
