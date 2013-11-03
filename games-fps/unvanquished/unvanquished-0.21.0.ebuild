@@ -13,16 +13,16 @@ HOMEPAGE="http://unvanquished.net/"
 SRC_URI="https://github.com/${MY_PN}/${MY_PN}/tarball/v${PV}
 	-> ${P}.tar.gz"
 
-LICENSE="GPL-3 CC-BY-SA-2.5 CC-BY-SA-3.0 as-is"
+LICENSE="GPL-3 CC-BY-SA-2.5 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+cpuinfo daemonmap dedicated +glsl mumble ncurses mysql openal +server theora +voip vorbis xvid"
+IUSE="daemonmap dedicated geoip +glsl mumble ncurses mysql openal +optimization sdl2 +server +smp theora tty-client +voip vorbis xvid"
+REQUIRED_USE="tty-client? ( !dedicated )"
 
 RDEPEND="
 	dev-libs/nettle[gmp]
 	dev-libs/gmp:0
 	~games-fps/${PN}-data-${PV}
-	media-libs/libsdl
 	net-misc/curl
 	sys-libs/zlib
 	daemonmap? (
@@ -37,8 +37,8 @@ RDEPEND="
 		media-libs/glew
 		media-libs/libogg
 		media-libs/libpng:0
-		media-libs/libsdl[X,opengl,video]
 		media-libs/libwebp
+		media-libs/opusfile
 		virtual/glu
 		virtual/jpeg
 		virtual/opengl
@@ -46,6 +46,8 @@ RDEPEND="
 		mysql? ( virtual/mysql )
 		ncurses? ( sys-libs/ncurses )
 		openal? ( media-libs/openal )
+		sdl2? ( media-libs/libsdl2[X,opengl,video] )
+		!sdl2? ( media-libs/libsdl[X,opengl,video] )
 		server? ( app-misc/screen )
 		xvid? ( media-libs/xvid )
 		vorbis? (
@@ -58,7 +60,8 @@ RDEPEND="
 		app-misc/screen
 		ncurses? ( sys-libs/ncurses )
 		voip? ( media-libs/speex )
-	)"
+	)
+	geoip? ( dev-libs/geoip )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
@@ -97,10 +100,10 @@ src_prepare() {
 }
 
 src_configure() {
-	# QA and package specific optimization
-	append-cflags -ffast-math -fno-strict-aliasing
-	append-cxxflags -ffast-math -fno-strict-aliasing
-	append-cppflags -D__extern_always_inline=inline
+	if use optimization ; then
+		append-cflags -ffast-math
+		append-cxxflags -ffast-math
+	fi
 
 	# theora requires vorbis
 	local mycmakeargs=(
@@ -108,9 +111,9 @@ src_configure() {
 		-DCMAKE_INSTALL_BINDIR="${GAMES_BINDIR}"
 		-DCMAKE_INSTALL_LIBDIR="$(games_get_libdir)/${PN}"
 		$(usex dedicated "-DBUILD_CLIENT=OFF" "-DBUILD_CLIENT=ON")
+		$(cmake-utils_use_build tty-client TTY_CLIENT)
 		$(cmake-utils_use_build daemonmap DAEMONMAP)
 		$(usex dedicated "-DBUILD_SERVER=ON" "$(cmake-utils_use_build server SERVER)")
-		$(cmake-utils_use_use cpuinfo CPUINFIO)
 		$(cmake-utils_use_use glsl GLSL_OPTIMIZER)
 		$(cmake-utils_use_use mumble MUMBLE)
 		$(cmake-utils_use_use mysql MYSQL)
@@ -120,6 +123,14 @@ src_configure() {
 		$(cmake-utils_use_use vorbis CODEC_VORBIS)
 		$(cmake-utils_use_use theora CIN_THEORA)
 		$(cmake-utils_use_use xvid CIN_XVID)
+		$(cmake-utils_use_use sdl2 SDL2)
+		$(cmake-utils_use_use smp SMP)
+		$(cmake-utils_use_use geoip GEOIP)
+		-DUSE_INTERNAL_OPUS=OFF
+		-DUSE_INTERNAL_GLEW=OFF
+		-DUSE_INTERNAL_SDL=OFF
+		-DUSE_INTERNAL_SPEEX=OFF
+		-DUSE_INTERNAL_WEBP=OFF
 	)
 
 	cmake-utils_src_configure
@@ -156,6 +167,10 @@ src_install() {
 
 	if use daemonmap ; then
 		newgamesbin daemonmap ${PN}map
+	fi
+
+	if use tty-client ; then
+		newgamesbin daemon-tty ${PN}-tty
 	fi
 
 	prepgamesdirs

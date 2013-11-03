@@ -6,23 +6,33 @@
 		<name>Julian Ospald</name>
 	</maintainer>
 	<upstream>
-		<changelog>https://github.com/Unvanquished/Unvanquished/commits/master</changelog>
-		<doc lang="en">http://unvanquished.net/wiki/index.php/Main_Page</doc>
-		<bugs-to>https://github.com/Unvanquished/Unvanquished/issues</bugs-to>
+		<changelog>
+			https://github.com/Unvanquished/Unvanquished/commits/master
+		</changelog>
+		<doc lang="en">http://unvanquished.net/wiki/index.php/Main_Page
+		</doc>
+		<bugs-to>https://github.com/Unvanquished/Unvanquished/issues
+		</bugs-to>
 	</upstream>
 	<longdescription lang="en">
-		Unvanquished is a fast-paced, futuristic FPS with RTS elements, pitting
-		technologically advanced humans against hordes of highly adaptable
-		aliens. The player can choose from either team, providing a fresh
-		gameplay experience on both sides of the conflict.
+		Unvanquished is a fast-paced, futuristic FPS with RTS elements,
+		pitting technologically advanced humans against hordes of highly
+		adaptable aliens. The player can choose from either team,
+		providing a fresh gameplay experience on both sides of the
+		conflict.
 	</longdescription>
 	<use>
-		<flag name="cpuinfo">Use CPUInfo (if compilation fails, then disable this)</flag>
+		<flag name="cpuinfo">Use CPUInfo
+			(if compilation fails, then disable this)</flag>
 		<flag name="daemonmap">Build Mapping tool</flag>
 		<flag name="glsl">Compile with GLSL Optimizer</flag>
 		<flag name="mumble">Compile with support for Mumble</flag>
+		<flag name="optimization">Use upstream recommended
+			CFLAGS optimizations</flag>
+		<flag name="sdl2">Use <pkg>media-libs/libsdl2</pkg>
+			instead of <pkg>media-libs/libsdl</pkg></flag>
 		<flag name="server">Build Daemonded server</flag>
+		<flag name="tty-client">Build Daemon headless client</flag>
 		<flag name="voip">Compile with VOIP support</flag>
-		<flag name="webp">Compile with WebP loader</flag>
 	</use>
 </pkgmetadata>
