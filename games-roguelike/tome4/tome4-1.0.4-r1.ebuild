@@ -69,8 +69,8 @@ src_configure() {
 	# respect LDFLAGS
 	# http://forums.te4.org/viewtopic.php?f=42&t=38715
 	sed -i \
-		-e 's~^[ \t]*LINKCMD.*$~LINKCMD = $(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(LDFLAGS) $(LIBS)~' \
-		build/{buildvm,minilua,TEngine}.make || die "premake sucks"
+		-e 's~^[ \t]*LINKCMD[ \t]*=[ \t]*$(CC).*$~LINKCMD = $(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(LDFLAGS) $(LIBS)~' \
+		build/*.make || die "premake sucks"
 
 	# FHS
 	# http://forums.te4.org/viewtopic.php?f=42&t=38716
