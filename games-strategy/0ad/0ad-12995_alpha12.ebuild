@@ -13,7 +13,7 @@ HOMEPAGE="http://play0ad.com/"
 DESCRIPTION="A free, real-time strategy game of ancient warfare"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-build.tar.xz"
 
-LICENSE="GPL-2 LGPL-2.1 MIT CC-BY-SA-3.0 as-is"
+LICENSE="GPL-2 LGPL-2.1 MIT CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 -*"
 IUSE="+audio editor fam pch test"
