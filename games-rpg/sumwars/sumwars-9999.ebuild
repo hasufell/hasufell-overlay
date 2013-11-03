@@ -25,7 +25,7 @@ for L in ${LANGS} ; do
 done
 unset L
 
-DEPEND="
+RDEPEND="
 	>=dev-games/cegui-0.7.6-r1[ogre]
 	!>=dev-games/cegui-0.8
 	>=dev-games/ogre-1.7.0[freeimage,opengl,-threads]
@@ -41,6 +41,7 @@ DEPEND="
 	>=net-libs/enet-1.3.0
 	x11-libs/libXrandr
 	tools? ( dev-libs/poco )"
+DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	ewarn "Orge3D currently doesn't work with USE-flag 'threads' under some circumstances."
