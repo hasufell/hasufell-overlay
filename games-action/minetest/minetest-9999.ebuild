@@ -12,10 +12,11 @@ EGIT_REPO_URI="git://github.com/celeron55/${PN}.git"
 LICENSE="LGPL-2.1+ CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS=""
-IUSE="+curl dedicated nls +server +sound +truetype"
+IUSE="+curl dedicated leveldb nls +server +sound +truetype"
 
 RDEPEND="dev-db/sqlite:3
 	>=dev-games/irrlicht-1.8-r2
+	>=dev-lang/lua-5.1.4
 	sys-libs/zlib
 	curl? ( net-misc/curl )
 	!dedicated? (
@@ -32,6 +33,7 @@ RDEPEND="dev-db/sqlite:3
 		)
 		truetype? ( media-libs/freetype:2 )
 	)
+	leveldb? ( dev-libs/leveldb )
 	nls? ( virtual/libintl )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
@@ -68,6 +70,7 @@ src_configure() {
 		$(cmake-utils_use_enable curl CURL)
 		$(cmake-utils_use_enable truetype FREETYPE)
 		$(cmake-utils_use_enable sound SOUND)
+		$(cmake-utils_use_enable leveldb LEVELDB)
 		)
 
 	cmake-utils_src_configure
