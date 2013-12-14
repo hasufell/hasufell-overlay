@@ -8,20 +8,21 @@ inherit cmake-utils games
 
 DESCRIPTION="Free/Libre Action Roleplaying game"
 HOMEPAGE="https://github.com/clintbellanger/flare-game"
-SRC_URI="mirror://sourceforge/flare-game/${P}.tar.gz"
+SRC_URI="https://github.com/clintbellanger/flare-engine/archive/v${PV}.tar.gz -> ${P}-engine.tar.gz"
 
-LICENSE="GPL-3"
+LICENSE="CC-BY-SA-3.0 GPL-3 OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	!games-engines/flare
 	media-libs/libsdl[X,audio,joystick,video]
 	media-libs/sdl-image[png]
 	media-libs/sdl-mixer[vorbis]
 	media-libs/sdl-ttf"
 DEPEND="${RDEPEND}"
+
+S=${WORKDIR}/flare-engine-${PV}
 
 src_configure() {
 	local mycmakeargs=(
