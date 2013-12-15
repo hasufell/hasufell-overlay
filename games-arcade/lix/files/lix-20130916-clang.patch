@@ -1,0 +1,13 @@
+diff --git a/src/other/language.cpp b/src/other/language.cpp
+index 95b7e16..55a055b 100644
+--- a/src/other/language.cpp
++++ b/src/other/language.cpp
+@@ -399,7 +399,7 @@ last_string;
+ // Rueckgabewert   Funktion
+ Language::Language Language::get()
+ {
+-    return static_cast <Language::Language> (useR->language);
++    return static_cast <Language> (useR->language);
+ }
+ 
+ 
