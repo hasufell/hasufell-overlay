@@ -17,9 +17,9 @@ DESCRIPTION="Free software version of Desura game client"
 HOMEPAGE="https://github.com/desura/Desurium"
 SRC_URI="mirror://sourceforge/desurium/${BREAKPAD_ARC}
 	mirror://sourceforge/desurium/${CEF_ARC}
-	bundled-wxgtk? ( ftp://ftp.wxwidgets.org/pub/2.9.3/${WX_ARC} )"
+	bundled-wxgtk? ( mirror://sourceforge/wxwindows/${WX_ARC} )"
 
-EGIT_REPO_URI="git://github.com/lodle/Desurium.git"
+EGIT_REPO_URI="git://github.com/desura/Desurium.git"
 EGIT_NOUNPACK="true"
 
 LICENSE="GPL-3"
