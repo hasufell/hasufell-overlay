@@ -59,6 +59,7 @@ RDEPEND="${COMMON_DEPEND}
 	x11-misc/xdg-user-dirs
 	x11-misc/xdg-utils"
 DEPEND="${COMMON_DEPEND}
+	dev-cpp/gtest
 	virtual/pkgconfig"
 
 pkg_pretend() {
