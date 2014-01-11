@@ -1,0 +1,182 @@
+From: Julian Ospald <hasufell@gentoo.org>
+Date: Sat Jan 11 19:27:39 UTC 2014
+Subject: respect user flags
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -77,175 +77,6 @@
+   set( ARCH "x86" )
+ endif()
+ 
+-################################################################################
+-# Compile and link flags
+-################################################################################
+-
+-include(CheckCCompilerFlag)
+-include(CheckCXXCompilerFlag)
+-
+-# Set flag without checking, optional argument specifies build type
+-macro( set_c_flag FLAG )
+-  if( ${ARGC} GREATER 1 )
+-    set( CMAKE_C_FLAGS_${ARGV1} "${CMAKE_C_FLAGS_${ARGV1}} ${FLAG}" )
+-  else()
+-    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${FLAG}" )
+-  endif()
+-endmacro()
+-macro( set_cxx_flag FLAG )
+-  if( ${ARGC} GREATER 1 )
+-    set( CMAKE_CXX_FLAGS_${ARGV1} "${CMAKE_CXX_FLAGS_${ARGV1}} ${FLAG}" )
+-  else()
+-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}" )
+-  endif()
+-endmacro()
+-macro( set_c_cxx_flag FLAG )
+-  set_c_flag( ${FLAG} ${ARGN} )
+-  set_cxx_flag( ${FLAG} ${ARGN} )
+-endmacro()
+-macro( set_linker_flag FLAG )
+-  set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${FLAG}" )
+-  set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${FLAG}" )
+-  set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${FLAG}" )
+-endmacro()
+-
+-# Try flag and set if it works, optional argument specifies build type
+-macro( try_cxx_flag PROP FLAG )
+-  check_CXX_compiler_flag( ${FLAG} FLAG_${PROP} )
+-  if( FLAG_${PROP} )
+-    set_cxx_flag( ${FLAG} ${ARGV2} )
+-  endif()
+-endmacro()
+-macro( try_c_cxx_flag PROP FLAG )
+-  # Only try the flag once on the C++ compiler
+-  try_cxx_flag( ${PROP} ${FLAG} ${ARGV2} )
+-  if( FLAG_${PROP} )
+-    set_c_flag( ${FLAG} ${ARGV2} )
+-  endif()
+-endmacro()
+-macro( try_linker_flag PROP FLAG )
+-  # Check it with the C compiler
+-  set( CMAKE_REQUIRED_FLAGS ${FLAG} )
+-  check_C_compiler_flag( ${FLAG} FLAG_${PROP} )
+-  set( CMAKE_REQUIRED_FLAGS "" )
+-  if( FLAG_${PROP} )
+-    set_linker_flag( ${FLAG} ${ARGN} )
+-  endif()
+-endmacro()
+-
+-if( MSVC )
+-  set_c_cxx_flag( "/MP" )
+-  set_c_cxx_flag( "/fp:fast" )
+-  set_c_cxx_flag( "/d2Zi+" RELWITHDEBINFO )
+-  if( ARCH STREQUAL "x86" )
+-    set_c_cxx_flag( "/arch:SSE2" )
+-  endif()
+-  if( ENABLE_LTO )
+-    set_c_cxx_flag( "/GL" RELEASE )
+-    set_linker_flag( "/LTCG" )
+-  endif()
+-else()
+-  set_c_cxx_flag( "-ffast-math" )
+-  set_c_cxx_flag( "-fno-strict-aliasing" )
+-  set_c_cxx_flag( "-fomit-frame-pointer" RELEASE )
+-  set_c_cxx_flag( "-fomit-frame-pointer" MINSIZEREL )
+-
+-  # Set arch on x86 to SSE2 minimum and enable CMPXCHG16B
+-  if( ARCH STREQUAL "x86" )
+-    set_c_cxx_flag( "-m32" )
+-    set_c_cxx_flag( "-msse2" )
+-    set_c_cxx_flag( "-mtune=generic" )
+-
+-    # Clang prints a warning when if it doesn't support -mfpmath=sse
+-    set( CMAKE_REQUIRED_FLAGS "-Werror" )
+-    set_c_cxx_flag( "-mfpmath=sse" )
+-    set( CMAKE_REQUIRED_FLAGS "" )
+-  elseif( ARCH STREQUAL "x86_64" )
+-    set_c_cxx_flag( "-m64" )
+-    set_c_cxx_flag( "-mtune=generic" )
+-
+-    # Clang prints a warning when if it doesn't support -mcx16
+-    set( CMAKE_REQUIRED_FLAGS "-Werror" )
+-    try_c_cxx_flag( MCX16 "-mcx16" )
+-    set( CMAKE_REQUIRED_FLAGS "" )
+-  endif()
+-
+-  # Use hidden symbol visibility if possible
+-  try_c_cxx_flag( FVISIBILITY_HIDDEN "-fvisibility=hidden" )
+-
+-  # Extra debug flags
+-  set_c_cxx_flag( "-g3" DEBUG )
+-  set_c_cxx_flag( "-g3" RELWITHDEBINFO )
+-  try_c_cxx_flag( OPTIMIZE_DEBUG "-Og" DEBUG )
+-
+-  # C++11 support
+-  try_cxx_flag( GNUXX11 "-std=gnu++11" )
+-  if( NOT FLAG_GNUXX11 )
+-    try_cxx_flag( GNUXX0X "-std=gnu++0x" )
+-    if( NOT FLAG_GNUXX0X )
+-      message( FATAL_ERROR "C++11 not supported by compiler" )
+-    endif()
+-  endif()
+-
+-  # Use MSVC-compatible bitfield layout
+-  if( WIN32 )
+-    set_c_cxx_flag( "-mms-bitfields" )
+-  endif()
+-
+-  # Use libc++ on Mac because the shipped libstdc++ version is too old
+-  if( APPLE )
+-    set_c_cxx_flag( "-stdlib=libc++" )
+-  endif()
+-
+-  # Hardening, don't set _FORTIFY_SOURCE in debug builds
+-  set_c_cxx_flag( "-D_FORTIFY_SOURCE=2" RELEASE )
+-  set_c_cxx_flag( "-D_FORTIFY_SOURCE=2" RELWITHDEBINFO )
+-  set_c_cxx_flag( "-D_FORTIFY_SOURCE=2" MINSIZEREL )
+-  if( ENABLE_HARDENING )
+-    try_c_cxx_flag( FNO_STRICT_OVERFLOW "-fno-strict-overflow" )
+-    try_c_cxx_flag( FSTACK_PROTECTOR_ALL "-fstack-protector-all" )
+-    try_c_cxx_flag( PARAM_SSP_BUFFER_SIZE "--param ssp-buffer-size=1" )
+-    try_c_cxx_flag( WSTACK_PROTECTOR "-Wstack-protector" )
+-    try_c_cxx_flag( FPIE "-fPIE" )
+-    try_linker_flag( LINKER_PIE "-pie" )
+-  endif()
+-
+-  # Linker flags
+-  try_linker_flag( LINKER_O1 "-Wl,-O1" )
+-  try_linker_flag( LINKER_SORT_COMMON "-Wl,--sort-common" )
+-  try_linker_flag( LINKER_AS_NEEDED "-Wl,--as-needed" )
+-  try_linker_flag( LINKER_NO_UNDEFINED "-Wl,--no-undefined" )
+-  try_linker_flag( LINKER_Z_RELRO "-Wl,-z,relro" )
+-  try_linker_flag( LINKER_Z_NOW "-Wl,-z,now" )
+-  if( WIN32 )
+-    try_linker_flag( LINKER_DYNAMICBASE "-Wl,--dynamicbase" )
+-    try_linker_flag( LINKER_NXCOMPAT "-Wl,--nxcompat" )
+-  endif()
+-
+-  # LTO support, only used on release builds
+-  if( ENABLE_LTO )
+-    # This flag is also used when linking
+-    set_c_cxx_flag( "-flto" RELEASE )
+-  endif()
+-
+-  # The -pthread flag sets some preprocessor defines
+-  try_c_cxx_flag( PTHREAD "-pthread" )
+-
+-  # Warning options
+-  set_c_cxx_flag( "-Wall" )
+-  if( USE_WEXTRA )
+-    set_c_cxx_flag( "-Wextra" )
+-  else()
+-    set_c_cxx_flag( "-Wno-sign-compare" )
+-    set_c_cxx_flag( "-Wno-write-strings" )
+-  endif()
+-
+-  if( USE_PEDANTIC )
+-    set_c_cxx_flag("-pedantic")
+-  endif()
+-
+-endif()
+-
+ # Windows-specific definitions
+ if( WIN32 )
+   # Minimum Windows version: XP
