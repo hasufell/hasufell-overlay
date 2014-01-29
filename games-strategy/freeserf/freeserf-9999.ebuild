@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS=""
 IUSE="+mixer"
 
-RDEPEND="media-libs/libsdl[X,audio,video]
-	mixer? ( media-libs/sdl-mixer[timidity] )"
+RDEPEND="media-libs/libsdl2[X,audio,video]
+	mixer? ( media-libs/sdl2-mixer[timidity] )"
 DEPEND="${RDEPEND}
 	mixer? ( virtual/pkgconfig )"
 
@@ -28,7 +28,7 @@ src_prepare() {
 
 src_configure() {
 	egamesconf \
-		$(use_enable mixer sdl-mixer)
+		$(use_enable mixer sdl2-mixer)
 }
 
 src_install() {
