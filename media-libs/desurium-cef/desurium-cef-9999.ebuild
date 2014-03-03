@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -11,39 +11,41 @@ inherit check-reqs cmake-utils git-2 python-any-r1 games
 # tools versions
 CEF_ARC="cef-291.tar.gz"
 CHROMIUM_ARC="chromium-15.0.876.0.tar.bz2"
-DEPOT_TOOLS_ARC="depot_tools-145556-2.tar.gz"
+DEPOT_TOOLS_ARC="depot_tools-r1.zip"
 
 DESCRIPTION="Highly patched CEF by desurium"
-HOMEPAGE="https://github.com/lodle/Desurium"
-SRC_URI="mirror://github/lodle/Desurium/${CEF_ARC}
-	http://commondatastorage.googleapis.com/chromium-browser-official/${CHROMIUM_ARC}
-	mirror://github/lodle/Desurium/${DEPOT_TOOLS_ARC}"
+HOMEPAGE="http://desura.com https://github.com/lindenlab/desura-app"
+SRC_URI="https://s3-us-west-2.amazonaws.com/lecs.desura.lindenlab.com/${CEF_ARC}
+	https://s3-us-west-2.amazonaws.com/lecs.desura.lindenlab.com/${CHROMIUM_ARC}
+	https://s3-us-west-2.amazonaws.com/lecs.desura.lindenlab.com/${DEPOT_TOOLS_ARC}"
 
-EGIT_REPO_URI="git://github.com/lodle/Desurium.git"
+EGIT_REPO_URI="https://github.com/lindenlab/desura-app.git git://github.com/lindenlab/desura-app.git"
 EGIT_NOUNPACK="true"
 
-LICENSE="BSD"
+# cef, chromium, depot-tools: BSD
+LICENSE="LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS=""
 RESTRICT="bindist"
 
 COMMON_DEPEND="
-	app-arch/bzip2
-	dev-libs/dbus-glib
 	dev-libs/libevent
 	dev-libs/libxml2
 	dev-libs/libxslt
 	dev-libs/nspr
 	dev-libs/nss
 	media-libs/alsa-lib
-	media-libs/flac
+	media-libs/fontconfig
+	media-libs/freetype
 	media-libs/libpng:0
 	media-libs/libwebp
 	media-libs/speex
-	sys-apps/dbus
 	sys-libs/zlib
 	virtual/jpeg
-	x11-libs/gtk+:2"
+	x11-libs/gtk+:2
+	x11-libs/libX11
+	x11-libs/libXext
+	x11-libs/libXrender"
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}
 	${PYTHON_DEPS}
@@ -77,7 +79,8 @@ src_configure() {
 }
 
 src_compile() {
-	cmake-utils_src_compile
+	# even autotools does not respect AR properly sometimes
+	cmake-utils_src_compile AR="$(tc-getAR)"
 }
 
 src_install() {
