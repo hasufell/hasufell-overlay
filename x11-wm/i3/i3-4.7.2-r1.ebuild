@@ -87,8 +87,7 @@ src_test() {
 		CFLAGS="${CFLAGS} -O0"
 
 		cd testcases || die
-		export XDUMMY_TMPDIR="${T}"
-		cat /usr/bin/Xorg > "${T}"/Xorg.root.bin || die
+		cat /usr/bin/Xorg > /tmp/Xorg.root.bin || die
 		VIRTUALX_COMMAND="./complete-run.pl --parallel 1 --keep-xdummy-output" \
 			virtualmake
 
