@@ -33,7 +33,8 @@ IUSE="+32bit bundled-wxgtk debug tools"
 # TODO: clang useflag should be substituted
 COMMON_DEPEND="
 	app-arch/bzip2
-	dev-cpp/gtest
+	>=dev-cpp/gtest-1.7.0
+	>=dev-cpp/gmock-1.7.0
 	dev-db/sqlite
 	>=dev-libs/boost-1.47:=
 	dev-libs/expat
