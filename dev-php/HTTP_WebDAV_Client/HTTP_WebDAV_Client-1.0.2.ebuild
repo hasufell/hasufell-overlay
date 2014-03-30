@@ -5,8 +5,8 @@
 inherit php-pear-r1
 
 DESCRIPTION="WebDAV stream wrapper class"
-LICENSE="PHP-2.02 PHP-3"
+LICENSE="PHP-3.01"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="vanilla"
+IUSE=""
 RDEPEND="dev-php/PEAR-HTTP_Request"
