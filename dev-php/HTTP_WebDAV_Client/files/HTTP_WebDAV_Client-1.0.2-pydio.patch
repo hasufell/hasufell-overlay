@@ -1,5 +1,5 @@
---- HTTP/WebDAV/Client/patch/Stream.php
-+++ HTTP/WebDAV/Client/patch/Stream.php
+--- HTTP/WebDAV/Client/Stream.php
++++ HTTP/WebDAV/Client/Stream.php
 @@ -494,15 +494,17 @@
  
              // for all returned resource entries
