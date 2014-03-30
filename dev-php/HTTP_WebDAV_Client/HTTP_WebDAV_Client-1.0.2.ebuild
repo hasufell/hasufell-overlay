@@ -15,6 +15,6 @@ RDEPEND="dev-php/PEAR-HTTP_Request"
 
 src_prepare() {
 	if ! use vanilla ; then
-		epatch "${FILESDIR}"/${PN}-pydio.patch
+		epatch "${FILESDIR}"/${P}-pydio.patch
 	fi
 }
