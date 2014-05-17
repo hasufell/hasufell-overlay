@@ -18,7 +18,7 @@ RDEPEND="
 		gnome-base/libglade
 		media-libs/libogg
 		media-libs/libpng:1.2
-		media-libs/libsdl[X,audio,joystick,opengl,video]
+		>=media-libs/libsdl-1.2.15-r5[X,sound,joystick,opengl,video]
 		media-libs/libtheora
 		media-libs/libvorbis
 		media-libs/openal
