@@ -105,7 +105,7 @@ src_test() {
 src_install() {
 	dogamesbin binaries/system/pyrogenesis
 
-	insinto /usr/share/${PN}
+	insinto "${GAMES_DATADIR}"/${PN}
 	doins -r binaries/data/l10n
 
 	exeinto "$(games_get_libdir)"/${PN}
