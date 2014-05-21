@@ -1,59 +1,69 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
 WX_GTK_VER="2.8"
 
 inherit eutils wxwidgets toolchain-funcs games
 
-MY_P=0ad-0.0.11-alpha
-DESCRIPTION="A free, real-time strategy game of ancient warfare"
-HOMEPAGE="http://play0ad.com/"
+MY_P=0ad-0.0.16-alpha
+DESCRIPTION="A free, real-time strategy game"
+HOMEPAGE="http://wildfiregames.com/0ad/"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-build.tar.xz"
 
-LICENSE="GPL-2 LGPL-2.1 MIT CC-BY-SA-3.0"
+LICENSE="GPL-2 LGPL-2.1 MIT CC-BY-SA-3.0 as-is"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 -*"
+KEYWORDS="-* ~amd64 ~x86"
 IUSE="+audio editor fam pch test"
 
 RDEPEND="
-	~dev-lang/spidermonkey-1.8.5
+	dev-lang/spidermonkey:24
 	dev-libs/boost
+	dev-libs/icu
 	dev-libs/libxml2
 	~games-strategy/0ad-data-${PV}
 	media-gfx/nvidia-texture-tools
 	media-libs/libpng:0
 	media-libs/libsdl[X,opengl,video]
 	net-libs/enet:1.3
+	net-libs/miniupnpc
+	net-libs/gloox
 	net-misc/curl
 	sys-libs/zlib
 	virtual/jpeg
 	virtual/opengl
 	x11-libs/libX11
+	x11-libs/libXcursor
 	audio? ( media-libs/libogg
 		media-libs/libvorbis
 		media-libs/openal )
-	editor? ( x11-libs/wxGTK:${WX_GTK_VER}[X,opengl] )
-	fam? ( virtual/fam )"
+	editor? ( x11-libs/wxGTK:${WX_GTK_VER}[X,opengl] )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	test? ( dev-lang/perl )"
 
 S=${WORKDIR}/${MY_P}
 
+src_unpack() {
+	die "
+0ad has been imported into the main tree with a different
+versioning scheme. Please remove this version and run:
+    emerge -av games-strategy/0ad::gentoo"
+}
+
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-{gentoo,pch}.patch
+	epatch "${FILESDIR}"/${P}-gentoo.patch
 }
 
 src_configure() {
 	local myconf=(
 		--with-system-nvtt
 		--with-system-enet
-		--with-system-mozjs185
+		--with-system-miniupnpc
+		--with-system-mozjs24
 		--minimal-flags
-		$(usex fam "" "--without-fam")
 		$(usex pch "" "--without-pch")
 		$(usex test "" "--without-tests")
 		$(usex audio "" "--without-audio")
@@ -88,7 +98,7 @@ src_configure() {
 
 src_compile() {
 	# build 3rd party fcollada
-	emake -C libraries/fcollada/src
+	emake -C libraries/source/fcollada/src
 
 	# build 0ad
 	emake -C build/workspaces/gcc verbose=1
@@ -102,6 +112,9 @@ src_test() {
 src_install() {
 	dogamesbin binaries/system/pyrogenesis
 
+	insinto "${GAMES_DATADIR}"/${PN}
+	doins -r binaries/data/l10n
+
 	exeinto "$(games_get_libdir)"/${PN}
 	doexe binaries/system/libCollada.so
 	use editor && doexe binaries/system/libAtlasUI.so
@@ -109,7 +122,7 @@ src_install() {
 	dodoc binaries/system/readme.txt
 	doicon build/resources/${PN}.png
 	games_make_wrapper ${PN} "${GAMES_BINDIR}/pyrogenesis"
-	make_desktop_entry ${PN} "0 A.D."
+	make_desktop_entry ${PN}
 
 	prepgamesdirs
 }

@@ -6,7 +6,7 @@ EAPI=5
 
 inherit games
 
-MY_P=0ad-0.0.13-alpha
+MY_P=0ad-0.0.16-alpha
 DESCRIPTION="Data files for 0ad"
 HOMEPAGE="http://wildfiregames.com/0ad/"
 SRC_URI="http://releases.wildfiregames.com/${MY_P}-unix-data.tar.xz"
@@ -17,6 +17,13 @@ KEYWORDS="-* ~amd64 ~x86"
 IUSE=""
 
 S=${WORKDIR}/${MY_P}
+
+src_unpack() {
+	die "
+0ad has been imported into the main tree with a different
+versioning scheme. Please remove this version and run:
+    emerge -av games-strategy/0ad::gentoo"
+}
 
 src_prepare() {
 	rm binaries/data/tools/fontbuilder/fonts/*.txt
