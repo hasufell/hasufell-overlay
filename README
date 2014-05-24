@@ -13,4 +13,5 @@ currently also including hacked i3 ebuilds with experimental
 test phase and window icon support
 
 
+### Repoman status
 [![Repoman Status](https://travis-ci.org/hasufell/hasufell-overlay.png)](https://travis-ci.org/hasufell/hasufell-overlay)
