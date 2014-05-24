@@ -34,6 +34,7 @@
 		* Supports multiple languages, translated by the community.
 	</longdescription>
 	<use>
+		<flag name="leveldb">Enable LevelDB backend</flag>
 		<flag name="server">Build minetest server</flag>
 	</use>
 	<upstream>

@@ -22,11 +22,6 @@
 		conflict.
 	</longdescription>
 	<use>
-		<flag name="cpuinfo">Use CPUInfo
-			(if compilation fails, then disable this)</flag>
-		<flag name="daemonmap">Build Mapping tool</flag>
-		<flag name="glsl">Compile with GLSL Optimizer</flag>
-		<flag name="mumble">Compile with support for Mumble</flag>
 		<flag name="optimization">Use upstream recommended
 			CFLAGS optimizations</flag>
 		<flag name="sdl2">Use <pkg>media-libs/libsdl2</pkg>
