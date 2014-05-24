@@ -17,7 +17,7 @@ IUSE=""
 
 RDEPEND="media-libs/libogg
 	media-libs/libpng:0
-	media-libs/libsdl[X,audio,video]
+	media-libs/libsdl[X,sound,video]
 	media-libs/libvorbis
 	media-libs/sdl-mixer[mp3,vorbis]
 	media-libs/sdl-image[png]"

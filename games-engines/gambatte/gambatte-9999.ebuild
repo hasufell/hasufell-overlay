@@ -28,7 +28,7 @@ RDEPEND="
 		x11-libs/libXrandr
 		x11-libs/libXv
 	)
-	sdl? ( media-libs/libsdl[X,audio,joystick,video] )"
+	sdl? ( media-libs/libsdl[X,sound,joystick,video] )"
 DEPEND="${RDEPEND}"
 
 fix_scons() {

@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="+mixer"
 
-RDEPEND="media-libs/libsdl2[X,audio,video]
+RDEPEND="media-libs/libsdl2[X,sound,video]
 	mixer? ( media-libs/sdl2-mixer[timidity] )"
 DEPEND="${RDEPEND}
 	mixer? ( virtual/pkgconfig )"

@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug +mixer"
 
-RDEPEND="media-libs/libsdl[X,audio,video]
+RDEPEND="media-libs/libsdl[X,sound,video]
 	mixer? ( media-libs/sdl-mixer[timidity] )"
 DEPEND="${RDEPEND}
 	mixer? ( virtual/pkgconfig )"

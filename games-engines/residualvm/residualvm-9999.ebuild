@@ -19,7 +19,7 @@ IUSE=""
 RDEPEND="
 	media-libs/alsa-lib
 	media-libs/freetype:2
-	media-libs/libsdl[X,audio,alsa,joystick,opengl,video]
+	media-libs/libsdl[X,sound,alsa,joystick,opengl,video]
 	sys-libs/zlib
 	virtual/glu
 	virtual/opengl"

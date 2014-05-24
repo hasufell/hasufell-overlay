@@ -18,7 +18,7 @@ IUSE=""
 
 RDEPEND="app-arch/bzip2
 	media-libs/libsamplerate
-	media-libs/libsdl[X,audio,video]
+	media-libs/libsdl[X,sound,video]
 	media-libs/libsndfile
 	media-libs/sdl-mixer
 	net-libs/miniupnpc

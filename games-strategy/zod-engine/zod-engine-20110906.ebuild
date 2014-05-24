@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="+editor +launcher"
 
 RDEPEND="
-	media-libs/libsdl[X,audio,video]
+	media-libs/libsdl[X,sound,video]
 	media-libs/sdl-ttf[X]
 	media-libs/sdl-mixer[mp3,timidity,vorbis,wav]
 	media-libs/sdl-image[png]

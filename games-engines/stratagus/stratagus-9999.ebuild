@@ -21,7 +21,7 @@ RDEPEND="dev-db/sqlite:3
 	media-libs/libpng:0
 	virtual/opengl
 	x11-libs/libX11
-	media-libs/libsdl[audio,opengl,video]
+	media-libs/libsdl[sound,opengl,video]
 	bzip2? ( app-arch/bzip2 )
 	mikmod? ( media-libs/libmikmod )
 	mng? ( media-libs/libmng )
