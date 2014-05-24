@@ -13,7 +13,7 @@ HOMEPAGE="http://unvanquished.net/"
 SRC_URI="https://github.com/${MY_PN}/${MY_PN}/tarball/v${PV}
 	-> ${P}.tar.gz"
 
-LICENSE="GPL-3 CCPL-Attribution-ShareAlike-2.5 CCPL-Attribution-ShareAlike-3.0 as-is"
+LICENSE="GPL-3 CC-BY-SA-2.5 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dedicated geoip +optimization sdl2 +server +smp tty-client +voip"
