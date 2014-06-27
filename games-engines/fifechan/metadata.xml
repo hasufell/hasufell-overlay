@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>mplichta@gmail.com</email>
+		<name>Michal Plichta</name>
+	</maintainer>
+	<use>
+		<flag name="allegro">Support for <pkg></pkg></flag>
+		<flag name="ogftl">Support for OpenGL-FreeType Library</flag>
+		<flag name="sdl_ttf">Optional SDL ttf Contrib Dependencies</flag>
+	</use>
+</pkgmetadata>
