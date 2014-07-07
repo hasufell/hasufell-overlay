@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<herd>games</herd>
+	<herd>proxy-maintainers</herd>
 	<maintainer>
 		<email>hasufell@gentoo.org</email>
 		<name>Julian Ospald</name>
+		<description>Maintainer, assign bugs to him</description>
+	</maintainer>
+	<maintainer>
+		<email>maddin081591@gmail.com</email>
+		<name>Martin-Kevin Neumann</name>
+		<description>Proxy maintainer, CC him on bugs</description>
 	</maintainer>
 	<longdescription lang="en">
 		Minetest is an infinite-world block sandbox game and a game
@@ -35,6 +43,13 @@
 	</longdescription>
 	<use>
 		<flag name="leveldb">Enable LevelDB backend</flag>
+		<flag name="luajit">
+			Use <pkg>dev-lang/luajit</pkg>
+			instead of <pkg>dev-lang/lua</pkg>
+		</flag>
+		<flag name="redis">Enable redis backend via
+			<pkg>dev-libs/hiredis</pkg>
+		</flag>
 		<flag name="server">Build minetest server</flag>
 	</use>
 	<upstream>

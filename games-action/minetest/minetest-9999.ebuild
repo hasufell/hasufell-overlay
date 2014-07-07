@@ -6,17 +6,16 @@ EAPI=5
 inherit eutils cmake-utils git-2 gnome2-utils vcs-snapshot user games
 
 DESCRIPTION="An InfiniMiner/Minecraft inspired game"
-HOMEPAGE="http://c55.me/minetest/"
-EGIT_REPO_URI="git://github.com/celeron55/${PN}.git"
+HOMEPAGE="http://minetest.net/"
+EGIT_REPO_URI="git://github.com/minetest/${PN}.git"
 
 LICENSE="LGPL-2.1+ CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS=""
-IUSE="+curl dedicated leveldb nls +server +sound +truetype"
+IUSE="+curl dedicated leveldb luajit nls redis +server +sound +truetype"
 
 RDEPEND="dev-db/sqlite:3
 	>=dev-games/irrlicht-1.8-r2
-	>=dev-lang/lua-5.1.4
 	sys-libs/zlib
 	curl? ( net-misc/curl )
 	!dedicated? (
@@ -34,7 +33,9 @@ RDEPEND="dev-db/sqlite:3
 		truetype? ( media-libs/freetype:2 )
 	)
 	leveldb? ( dev-libs/leveldb )
-	nls? ( virtual/libintl )"
+	luajit? ( dev-lang/luajit:2 )
+	nls? ( virtual/libintl )
+	redis? ( dev-libs/hiredis )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 
@@ -60,17 +61,20 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DRUN_IN_PLACE=0
-		-DCUSTOM_SHAREDIR="${GAMES_DATADIR}/${PN}"
+		$(usex dedicated "-DBUILD_SERVER=ON -DBUILD_CLIENT=OFF" "$(cmake-utils_use_build server SERVER) -DBUILD_CLIENT=ON")
 		-DCUSTOM_BINDIR="${GAMES_BINDIR}"
 		-DCUSTOM_DOCDIR="/usr/share/doc/${PF}"
 		-DCUSTOM_LOCALEDIR="/usr/share/locale"
-		$(usex dedicated "-DBUILD_SERVER=ON -DBUILD_CLIENT=OFF" "$(cmake-utils_use_build server SERVER) -DBUILD_CLIENT=ON")
-		$(cmake-utils_use_enable nls GETTEXT)
+		-DCUSTOM_SHAREDIR="${GAMES_DATADIR}/${PN}"
 		$(cmake-utils_use_enable curl CURL)
 		$(cmake-utils_use_enable truetype FREETYPE)
-		$(cmake-utils_use_enable sound SOUND)
+		$(cmake-utils_use_enable nls GETTEXT)
+		-DENABLE_GLES=0
 		$(cmake-utils_use_enable leveldb LEVELDB)
+		$(cmake-utils_use_enable redis REDIS)
+		$(cmake-utils_use_enable sound SOUND)
+		$(cmake-utils_use !luajit DISABLE_LUAJIT)
+		-DRUN_IN_PLACE=0
 		)
 
 	cmake-utils_src_configure
@@ -104,9 +108,6 @@ pkg_postinst() {
 		elog
 		elog "optional dependencies:"
 		elog "	games-action/minetest_game (official mod)"
-		elog "	games-action/minetest_common (official mod)"
-		elog "	games-action/minetest_build (official mod)"
-		elog "	games-action/minetest_survival (official mod)"
 		elog
 	fi
 
