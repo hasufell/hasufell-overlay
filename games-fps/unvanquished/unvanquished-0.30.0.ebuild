@@ -17,7 +17,7 @@ SRC_URI="https://github.com/${MY_PN}/${MY_PN}/tarball/v${PV}
 	x86? ( http://vanquished.zapto.org/~amanieu/unvanquished_deps/linux32-2.tar.bz2 -> unvanquished-${PV}-external-x86-2.tar.bz2 )
 	amd64? ( http://vanquished.zapto.org/~amanieu/unvanquished_deps/linux64-2.tar.bz2 -> unvanquished-${PV}-external-amd64-2.tar.bz2 )"
 
-LICENSE="GPL-3 CCPL-Attribution-ShareAlike-2.5 CCPL-Attribution-ShareAlike-3.0 as-is"
+LICENSE="GPL-3 CC-BY-SA-2.5 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dedicated geoip +optimization sdl2 +server +smp +voip"
