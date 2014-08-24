@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="cdinstall devtools +ffmpeg +launcher test"
 
 # XXX static build
-RDEPEND=">=dev-games/mygui-3.2.0
+RDEPEND=">=dev-games/mygui-3.2.1[ogre]
 	>=dev-games/ogre-1.8.0[cg,freeimage,ois,opengl,zip]
 	dev-games/ois
 	>=dev-libs/boost-1.46.0
