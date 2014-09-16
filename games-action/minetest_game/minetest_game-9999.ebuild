@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-RDEPEND="~games-action/minetest-${PV}[-dedicated]"
+RDEPEND="~games-action/minetest-${PV}"
 
 src_unpack() {
 	git-2_src_unpack
