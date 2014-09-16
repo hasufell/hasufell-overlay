@@ -15,11 +15,11 @@ KEYWORDS=""
 IUSE="+curl dedicated leveldb luajit nls redis +server +sound +truetype"
 
 RDEPEND="dev-db/sqlite:3
-	>=dev-games/irrlicht-1.8-r2
 	sys-libs/zlib
 	curl? ( net-misc/curl )
 	!dedicated? (
 		app-arch/bzip2
+		>=dev-games/irrlicht-1.8-r2
 		media-libs/libpng:0
 		virtual/jpeg
 		virtual/opengl
@@ -37,6 +37,7 @@ RDEPEND="dev-db/sqlite:3
 	nls? ( virtual/libintl )
 	redis? ( dev-libs/hiredis )"
 DEPEND="${RDEPEND}
+	>=dev-games/irrlicht-1.8-r2
 	nls? ( sys-devel/gettext )"
 
 pkg_setup() {
@@ -75,7 +76,12 @@ src_configure() {
 		$(cmake-utils_use_enable sound SOUND)
 		$(cmake-utils_use !luajit DISABLE_LUAJIT)
 		-DRUN_IN_PLACE=0
-		)
+		-DWITH_BUNDLED_LUA=0
+		$(use dedicated && {
+			echo "-DIRRLICHT_SOURCE_DIR=/the/irrlicht/source"
+			echo "-DIRRLICHT_INCLUDE_DIR=/usr/include/irrlicht"
+		})
+	)
 
 	cmake-utils_src_configure
 }
