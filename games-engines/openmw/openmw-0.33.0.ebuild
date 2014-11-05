@@ -71,7 +71,7 @@ src_compile() {
 	cmake-utils_src_compile
 
 	if use doc ; then
-		emake doc
+		emake -C "${CMAKE_BUILD_DIR}" doc
 	fi
 }
 
@@ -79,7 +79,7 @@ src_install() {
 	cmake-utils_src_install
 	dodoc readme.txt
 	if use doc ; then
-		dodoc -r docs/Doxygen/html
+		dodoc -r "${CMAKE_BUILD_DIR}"/docs/Doxygen/html
 	fi
 	prepgamesdirs
 }
