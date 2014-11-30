@@ -1,3 +1,7 @@
+## THIS OVERLAY IS DEPRECATED
+
+Use [https://github.com/hasufell/games-overlay](https://github.com/hasufell/games-overlay) instead.
+
 ### Purpose and scope
 ebuild hosting of
 * EPSXE emulator and several plugins (amd64 and x86), which are treecleaned from the main tree
